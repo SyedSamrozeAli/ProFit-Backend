@@ -1,0 +1,26 @@
+[9516] Log opened at 2024-09-28 16:05:16.900124
+[9516] [Step Debug] INFO: Connecting to configured address/port: 127.0.0.1:9001.
+[9516] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 127.0.0.1:9001 (through xdebug.client_host/xdebug.client_port).
+[9516] Log closed at 2024-09-28 16:05:17.130264
+
+[18824] Log opened at 2024-09-28 16:11:37.024518
+[18824] [Step Debug] INFO: Connecting to configured address/port: 127.0.0.1:9001.
+[18824] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 127.0.0.1:9001 (through xdebug.client_host/xdebug.client_port).
+[18824] [Step Debug] INFO: Connecting to configured address/port: 127.0.0.1:9001.
+[18824] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 127.0.0.1:9001 (through xdebug.client_host/xdebug.client_port).
+[18824] Log closed at 2024-09-28 16:11:40.083399
+
+[23632] Log opened at 2024-09-28 16:11:42.140429
+[23632] [Step Debug] INFO: Connecting to configured address/port: 127.0.0.1:9001.
+[23632] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 127.0.0.1:9001 (through xdebug.client_host/xdebug.client_port).
+[23632] [Step Debug] INFO: Connecting to configured address/port: 127.0.0.1:9001.
+[23632] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 127.0.0.1:9001 (through xdebug.client_host/xdebug.client_port).
+[23632] Log closed at 2024-09-28 16:11:43.393484
+
+[8860] Log opened at 2024-09-28 16:11:45.364149
+[8860] [Step Debug] INFO: Connecting to configured address/port: 127.0.0.1:9001.
+[8860] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 127.0.0.1:9001 (through xdebug.client_host/xdebug.client_port).
+[8860] [Step Debug] INFO: Connecting to configured address/port: 127.0.0.1:9001.
+[8860] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 127.0.0.1:9001 (through xdebug.client_host/xdebug.client_port).
+[8860] Log closed at 2024-09-28 16:11:46.512806
+
