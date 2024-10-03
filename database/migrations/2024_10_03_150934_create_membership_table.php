@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
-
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -13,11 +13,12 @@ return new class extends Migration
     {
         DB::statement("
         
-            CREATE TABLE members_have_membership (
+            CREATE TABLE membership (
+                membership_id INT PRIMARY KEY AUTO_INCREMENT,
+                membership_type ENUM('Standard','Premium') DEFAULT 'Standard' NOT NULL,
                 member_id INT NOT NULL,
-                membership_id INT NOT NULL,
-                FOREIGN KEY (member_id) REFERENCES members (member_id) ON DELETE CASCADE ON UPDATE CASCADE,
-                FOREIGN KEY (membership_id) REFERENCES memberships (membership_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT fk_membership_member FOREIGN KEY (member_id) REFERENCES members (member_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                price FLOAT NOT NULL,
                 UNIQUE (member_id, membership_id),
                 duration ENUM('3','6','12') DEFAULT 3,
                 start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('DROP TABLE IF EXISTS members_have_membership');
+        DB::statement("DROP TABLE IF EXISTS membership");
     }
 };
