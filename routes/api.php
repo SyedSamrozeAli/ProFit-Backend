@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\TrainerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MemberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +17,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/admin/auth/login',[AdminAuthController::class,'Login']);
+
+// Authentication Routes
+Route::post('/admin/auth/login', [AdminAuthController::class, 'Login']);
+
+//Member Routes
+Route::middleware(['authenticate'])->prefix('member')->group(function () {
+    Route::get('/', [MemberController::class, 'getMembers']);
+    Route::get('/{memberId}', [MemberController::class, 'getSpecificMember']);
+    Route::post('/', [MemberController::class, 'storeMember']);
+    Route::put('/{memberId}', [MemberController::class, 'updateMember']);
+    Route::delete('/{memberId}', [MemberController::class, 'deleteMember']);
+});
+
+// Trainer Routes
+Route::middleware(['authenticate'])->group(function () {
+    // Route::get('/', [TrainerController::class, 'getTrainer']);
+    // Route::get('/{trainerId}', [TrainerController::class, 'getSpecificTrainer']);
+    Route::post('/trainer', [TrainerController::class, 'storeTrainer']);
+    // Route::put('/{trainerId}', [TrainerController::class, 'updateTrainer']);
+    // Route::delete('/{trainerId}', [TrainerController::class, 'deleteTrainer']);
+});
