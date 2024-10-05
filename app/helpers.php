@@ -45,12 +45,24 @@ if (!function_exists('successResponse')) {
      * @param int $code
      * @return \Illuminate\Http\JsonResponse
      */
+    // function successResponse($message, $result = [], $paginate = false, $code = 200)
+    // {
+    //     if ($paginate && is_object($result)) {
+    //         $result = paginate($result);
+    //     }
+
+    //     $response = [
+    //         'success' => true,
+    //         'status_code' => $code,
+    //         'message' => [$message],
+    //         'data' => $result
+    //     ];
+
+    //     return response()->json($response, $code);
+    // }
+
     function successResponse($message, $result = [], $paginate = false, $code = 200)
     {
-        if ($paginate && is_object($result)) {
-            $result = paginate($result);
-        }
-
         $response = [
             'success' => true,
             'status_code' => $code,
@@ -58,8 +70,26 @@ if (!function_exists('successResponse')) {
             'data' => $result
         ];
 
+        // Handle pagination
+        if ($paginate && !empty($result)) {
+            $totalRecords = DB::table('trainers')->count(); // Total records in trainers table
+            $limit = request()->query('limit', 10); // Default limit
+            $page = request()->query('page', 1); // Default page
+            $totalPages = ceil($totalRecords / $limit); // Total pages
+
+            $paginationData = [
+                'current_page' => (int) $page,
+                'total_records' => $totalRecords,
+                'total_pages' => $totalPages,
+                'limit' => (int) $limit
+            ];
+
+            $response['pagination'] = $paginationData;
+        }
+
         return response()->json($response, $code);
     }
+
 }
 
 if (!function_exists('getAuthenticatedUser')) {
@@ -135,8 +165,8 @@ if (!function_exists('handleException')) {
             return errorResponse('Authorization Token not found', 401);
         }
 
-        if($e instanceof ApiErrorException ) {
-            return errorResponse( $e->getMessage(), 402);
+        if ($e instanceof ApiErrorException) {
+            return errorResponse($e->getMessage(), 402);
         }
 
         // For other exceptions, return a generic error response
