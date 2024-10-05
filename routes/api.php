@@ -32,9 +32,9 @@ Route::middleware(['authenticate'])->prefix('member')->group(function () {
 
 // Trainer Routes
 Route::middleware(['authenticate'])->group(function () {
-    // Route::get('/', [TrainerController::class, 'getTrainer']);
-    // Route::get('/{trainerId}', [TrainerController::class, 'getSpecificTrainer']);
+    Route::get('/trainer', [TrainerController::class, 'getTrainers']);
+    Route::get('/trainer/{trainerId}', [TrainerController::class, 'getSpecificTrainer']);
     Route::post('/trainer', [TrainerController::class, 'storeTrainer']);
-    // Route::put('/{trainerId}', [TrainerController::class, 'updateTrainer']);
-    // Route::delete('/{trainerId}', [TrainerController::class, 'deleteTrainer']);
+    Route::put('/trainer/{trainerId}', [TrainerController::class, 'updateTrainer']);
+    Route::delete('/trainer/{trainerId}', [TrainerController::class, 'deleteTrainer']);
 });
