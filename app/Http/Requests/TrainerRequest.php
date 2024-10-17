@@ -38,7 +38,7 @@ class TrainerRequest extends FormRequest
                     'age' => 'required|integer|max:50',
                     'gender' => 'required|string|in:male,female',
                     'DOB' => 'required|date|after_or_equal:2010-01-01',
-                    'phone_number' => 'required|string|min:10|max:15|unique:trainers,phone_number',
+                    'phone_number' => 'required|string|min:11|max:11|unique:trainers,phone_number',
                     'trainer_profile_image' => 'string|unique:trainers',
                     'trainer_address' => 'required|string|min:10|max:100',
                     'experience' => 'required|integer|min:1|max:20',
@@ -72,12 +72,17 @@ class TrainerRequest extends FormRequest
     }
 
     protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json([
-            'success' => false,
-            'status_code' => 422,
-            'message' => $validator->errors(),
-            'data' => []
-        ], 422));
-    }
+{
+    // Get all error messages without field keys
+    $errorMessages = $validator->errors()->all(); // This will return a simple array of error messages
+
+    throw new HttpResponseException(response()->json([
+        'success' => false,
+        'status_code' => 422,
+        'message' => 'Validation errors occurred.',
+        'errors' => $errorMessages, // Returning only the list of error messages
+        'data' => []
+    ], 422));
+}
+
 }
