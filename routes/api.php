@@ -32,12 +32,7 @@ Route::middleware(['authenticate'])->group(function () {
 
 // Trainer Routes
 Route::middleware(['authenticate'])->group(function () {
-<<<<<<< HEAD
     Route::get('/trainer', [TrainerController::class, 'getTrainers']);
-=======
-    Route::get('/trainer', [TrainerController::class, 'getTrainers'])->name('getFilteredTrainers');
-    Route::get('/trainer/{trainerId}', [TrainerController::class, 'getSpecificTrainer']);
->>>>>>> d0c46b45c9ab76c8784a746251503d0945e405cc
     Route::post('/trainer', [TrainerController::class, 'storeTrainer']);
     Route::get('/trainer/{trainerId}', [TrainerController::class, 'getSpecificTrainer']);
     Route::put('/trainer/{trainerId}', [TrainerController::class, 'updateTrainer']);
