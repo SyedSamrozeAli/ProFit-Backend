@@ -22,17 +22,22 @@ use App\Http\Controllers\MemberController;
 Route::post('/admin/auth/login', [AdminAuthController::class, 'Login']);
 
 //Member Routes
-Route::middleware(['authenticate'])->prefix('member')->group(function () {
-    Route::get('/', [MemberController::class, 'getMembers']);
-    Route::get('/{memberId}', [MemberController::class, 'getSpecificMember']);
-    Route::post('/', [MemberController::class, 'storeMember']);
-    Route::put('/{memberId}', [MemberController::class, 'updateMember']);
-    Route::delete('/{memberId}', [MemberController::class, 'deleteMember']);
+Route::middleware(['authenticate'])->group(function () {
+    Route::get('/member/', [MemberController::class, 'getMembers']);
+    Route::get('/member/{memberId}', [MemberController::class, 'getSpecificMember']);
+    Route::post('/member', [MemberController::class, 'storeMember']);
+    Route::put('/member/{memberId}', [MemberController::class, 'updateMember']);
+    Route::delete('/member/{memberId}', [MemberController::class, 'deleteMember']);
 });
 
 // Trainer Routes
 Route::middleware(['authenticate'])->group(function () {
+<<<<<<< HEAD
     Route::get('/trainer', [TrainerController::class, 'getTrainers']);
+=======
+    Route::get('/trainer', [TrainerController::class, 'getTrainers'])->name('getFilteredTrainers');
+    Route::get('/trainer/{trainerId}', [TrainerController::class, 'getSpecificTrainer']);
+>>>>>>> d0c46b45c9ab76c8784a746251503d0945e405cc
     Route::post('/trainer', [TrainerController::class, 'storeTrainer']);
     Route::get('/trainer/{trainerId}', [TrainerController::class, 'getSpecificTrainer']);
     Route::put('/trainer/{trainerId}', [TrainerController::class, 'updateTrainer']);

@@ -28,8 +28,10 @@ class TrainerRequest extends FormRequest
         // Get the current HTTP method
         $method = $this->method();
 
+        // Define validation rules based on the HTTP method
         switch ($method) {
 
+            // Validations for Creating a new trainer
             case 'POST':
                 return [
                     'trainer_name' => 'required|string|min:3|max:50',
@@ -46,6 +48,7 @@ class TrainerRequest extends FormRequest
                     'hourly_rate' => 'required|numeric|min:500',
                 ];
 
+            // Validations for updating a trainer    
             case 'PUT':
 
                 $trainerId = $this->route('trainerId'); // Assuming the trainer ID is passed in the route
@@ -65,8 +68,43 @@ class TrainerRequest extends FormRequest
                     'hourly_rate' => 'numeric|min:500',
                 ];
 
+            // Validations when getting filtered data for trainers    
+            case 'GET':
+
+                $routeName = $this->route()->getName();
+                if ($routeName == 'getFilteredData') {
+
+                    return [
+                        // Filter validations
+                        'name' => 'nullable|string|max:255',
+                        'email' => 'nullable|email|max:255',
+                        'CNIC' => 'nullable|string|regex:/^[0-9]{13}$/', // CNIC with 13 digits
+                        'gender' => 'nullable|in:Male,Female,Other',
+                        'maxAge' => 'nullable|integer|min:1|max:100',
+                        'minAge' => 'nullable|integer|min:1|max:100|lte:maxAge', // minAge must be <= maxAge
+                        'minSalary' => 'nullable|numeric|min:0',
+                        'maxSalary' => 'nullable|numeric|min:0|gte:minSalary', // maxSalary must be >= minSalary
+                        'availability' => 'nullable|boolean', // For true/false availability status
+                        'maxExperience' => 'nullable|integer|min:0',
+                        'minExperience' => 'nullable|integer|min:0|lte:maxExperience', // minExperience must be <= maxExperience
+                        'startHireDate' => 'nullable|date|before_or_equal:endHireDate',
+                        'endHireDate' => 'nullable|date|after_or_equal:startHireDate',
+                        'minRating' => 'nullable|numeric|min:0|max:5', // Assuming rating is on a 0-5 scale
+                        'maxRating' => 'nullable|numeric|min:0|max:5|gte:minRating', // maxRating must be >= minRating
+
+                        // Sorting and ordering validations
+                        'orderByName' => 'nullable|in:asc,desc',
+                        'orderBySalary' => 'nullable|in:asc,desc',
+                        'orderByHireDate' => 'nullable|in:asc,desc',
+                        'orderByRating' => 'nullable|in:asc,desc',
+                    ];
+
+                } else {
+                    return [];
+                }
+
             default:
-                return []; // No validation rules for other HTTP methods (GET, PATCH, DELETE)
+                return []; // No validation rules for other HTTP methods (PATCH, DELETE)
 
         }
     }
