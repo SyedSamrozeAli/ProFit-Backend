@@ -221,10 +221,9 @@ class TrainerController extends Controller
             }
 
             // Extracting the data according to the filter
-            // Saving the record in Larvel built-in Cache for 60 seconds
-            $trainers = Cache::remember('trainers_data', 60, function () use ($DBquery, $filterValues) {
-                return DB::select($DBquery, $filterValues);
-            });
+
+            $trainers = DB::select($DBquery, $filterValues);
+
 
             // Check if trainers are found
             if (!empty($trainers)) {
@@ -287,7 +286,10 @@ class TrainerController extends Controller
 
         if ($request->has('availability') && !empty($request->query('availability'))) {
             $filterFields[] = "availability=?";
-            $filterValues[] = $request->availability;
+            if ($request->availability == 'active')
+                $filterValues[] = 1;
+            else if ($request->availability == 'inactive')
+                $filterValues[] = 0;
         }
 
         if ($request->has('maxExperience') && !empty($request->query('maxExperience'))) {
