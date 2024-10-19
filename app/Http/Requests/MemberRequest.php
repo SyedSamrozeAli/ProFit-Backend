@@ -36,12 +36,13 @@ class MemberRequest extends FormRequest
                     'phone_number' => 'required|string|max:15',
                     'DOB' => 'required|date|before:today',
                     'profile_image' => 'nullable|string|max:255',
-                    'membership_type' => 'required|in:standard,premium',
+                    'membership_type' => 'required|in:Standard,Premium',
                     'trainer_id' => 'nullable|integer|exists:trainers,trainer_id|required_if:membership_type,premium|prohibited_if:membership_type,standard',
                     'addmission_date' => 'required|date',
                     'membership_duration' => 'required|integer|in:3,6,12'
                 ];
         }
+
     }
 
     public function messages()
@@ -57,7 +58,11 @@ class MemberRequest extends FormRequest
             'DOB.before' => 'Date of birth must be before today',
             'trainer_id.exists' => 'Trainer does not exist',
             'trainer_id.required_if' => 'Must select trainer for Premium Package',
-            'trainer_id.prohibited_if' => 'Trainer cannot be selected for Standard Package'
+            'trainer_id.prohibited_if' => 'Trainer cannot be selected for Standard Package',
+            'CNIC.required' => "CNIC is required",
+            'CNIC.unique' => "CNIC already in use",
+            'DOB.required' => "Date of Birth is required"
+
         ];
     }
 
