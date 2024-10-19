@@ -27,7 +27,8 @@ class TrainerResource extends JsonResource
             'address' => $this->trainer_address,
             'experience' => $this->experience,
             'rating' => $this->rating,
-            'hire_date' => $this->hire_date
+            'hire_date' => $this->hire_date,
+            'status' => $this->availability
 
 
         ];
