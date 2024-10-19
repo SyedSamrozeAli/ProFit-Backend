@@ -18,11 +18,11 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
         $this->call([
             TrainerSeeder::class,
             AdminSeeder::class,
             MembershipSeeder::class
             // Add other seeders here
-        ]);
     }
 }

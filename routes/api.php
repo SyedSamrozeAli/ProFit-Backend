@@ -32,9 +32,9 @@ Route::middleware(['authenticate'])->group(function () {
 
 // Trainer Routes
 Route::middleware(['authenticate'])->group(function () {
-    Route::get('/trainer', [TrainerController::class, 'getTrainers'])->name('getFilteredTrainers');
-    Route::get('/trainer/{trainerId}', [TrainerController::class, 'getSpecificTrainer']);
+    Route::get('/trainer', [TrainerController::class, 'getTrainers']);
     Route::post('/trainer', [TrainerController::class, 'storeTrainer']);
+    Route::get('/trainer/{trainerId}', [TrainerController::class, 'getSpecificTrainer']);
     Route::put('/trainer/{trainerId}', [TrainerController::class, 'updateTrainer']);
     Route::delete('/trainer/{trainerId}', [TrainerController::class, 'deleteTrainer']);
 });
