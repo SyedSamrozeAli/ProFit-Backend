@@ -36,7 +36,7 @@ class TrainerRequest extends FormRequest
                 return [
                     'trainer_name' => 'required|string|min:3|max:50',
                     'trainer_email' => 'required|email|unique:trainers,trainer_email',
-                    'CNIC' => 'required|string',// we have to add unique constraint and 13 characters constraint in CNIC but in the end.
+                    'CNIC' => 'required|string|min:13|max:13',
                     'age' => 'required|integer|max:50',
                     'gender' => 'required|string|in:male,female',
                     'DOB' => 'required|date|after_or_equal:2010-01-01',
@@ -45,7 +45,6 @@ class TrainerRequest extends FormRequest
                     'trainer_address' => 'required|string|min:10|max:100',
                     'experience' => 'required|integer|min:1|max:20',
                     'salary' => 'required|numeric|min:1000',
-                    'hourly_rate' => 'required|numeric|min:500',
                 ];
 
             // Validations for updating a trainer    
@@ -55,7 +54,7 @@ class TrainerRequest extends FormRequest
 
                 return [
                     'trainer_name' => 'string|min:3|max:50',
-                    'trainer_email' => 'email|unique:trainers,trainer_email' . $trainerId, // trainerId is concatenated so that unique values are check by ignoring the current trainerId
+                    'trainer_email' => ['email', 'unique:trainers,trainer_email,' . $trainerId . ',trainer_id'], // trainerId is concatenated so that unique values are check by ignoring the current trainerId
                     'CNIC' => 'string',// we have to add unique constraint and 13 characters constraint in CNIC but in the end.
                     'age' => 'integer|max:50',
                     'gender' => 'string|in:male,female',

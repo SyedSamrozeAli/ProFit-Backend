@@ -16,20 +16,20 @@ class TrainerResource extends JsonResource
     {
         return [
 
-            'id' => $this->trainer_id,
-            'name' => $this->trainer_name,
-            'email' => $this->trainer_email,
+            'trainer_id' => $this->trainer_id,
+            'trainer_name' => $this->trainer_name,
+            'trainer_email' => $this->trainer_email,
             'age' => $this->age,
             'gender' => $this->gender,
             'DOB' => $this->DOB,
             'salary' => $this->salary,
-            'phone' => $this->phone_number,
-            'address' => $this->trainer_address,
+            'phone_number' => $this->phone_number,
+            'trainer_address' => $this->trainer_address,
             'experience' => $this->experience,
             'rating' => $this->rating,
             'hire_date' => $this->hire_date,
-            'status' => $this->availability
-
+            'status' => $this->availability,
+            'CNIC' => $this->CNIC,
 
         ];
     }
