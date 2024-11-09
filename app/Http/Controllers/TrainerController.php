@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TrainerRequest;
 use App\Http\Resources\TrainerResource;
+use App\Models\Trainer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -16,32 +17,10 @@ class TrainerController extends Controller
     public function storeTrainer(TrainerRequest $request)
     {
 
-        // Store the trainer data in the database
-        DB::statement("
-            
-            INSERT INTO trainers (trainer_name,trainer_email,CNIC,age,gender,DOB,phone_number,trainer_address,experience,salary,hourly_rate,availability,rating)
-            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
-        
-        ",
-            [
-                $request->trainer_name,
-                $request->trainer_email,
-                $request->CNIC,
-                $request->age,
-                $request->gender,
-                $request->DOB,
-                $request->phone_number,
-                $request->trainer_address,
-                $request->experience,
-                $request->salary,
-                $request->hourly_rate,
-                1, // 1 means TRUE
-                0
-            ]
-        );
+        Trainer::addTrainer($request);
 
         // Finding the newly added trainer
-        $newTrainer = DB::select("SELECT * FROM trainers WHERE trainer_email=?", [$request->trainer_email]);
+        $newTrainer = Trainer::findTrainer('trainer_email', $request->trainer_email);
 
         // Return a success response with the trainer data
         return successResponse("Trainer added successfully", TrainerResource::make($newTrainer[0]));
@@ -55,7 +34,7 @@ class TrainerController extends Controller
         try {
 
             // Finding the trainer by ID
-            $trainer = DB::select("SELECT * FROM trainers WHERE trainer_id=?", [$trainerId]);  // 'Select' statement return an array
+            $trainer = Trainer::findTrainer('trainer_id', $trainerId);
             if (!empty($trainer)) {
 
                 // Return a success response with the trainer data
@@ -135,11 +114,6 @@ class TrainerController extends Controller
                 $updateValues[] = $request->salary;
             }
 
-            if ($request->has('hourly_rate')) {
-                $updateFields[] = "hourly_rate = ?";
-                $updateValues[] = $request->hourly_rate;
-            }
-
             // If no fields were sent, return an error response
             if (empty($updateFields)) {
                 return errorResponse("No fields to update", 400);
@@ -153,10 +127,10 @@ class TrainerController extends Controller
             $updateQuery .= implode(", ", $updateFields) . " WHERE trainer_id = ?";
 
             // Execute the update query
-            DB::update($updateQuery, $updateValues);
+            Trainer::updateTrainer($updateQuery, $updateValues);
 
             // Find the updated trainer
-            $updatedTrainer = DB::select("SELECT * FROM trainers WHERE trainer_id = ?", [$trainerId]);
+            $updatedTrainer = Trainer::findTrainer('trainer_id', $trainerId);
 
             if (!empty($updatedTrainer)) {
 
@@ -204,7 +178,7 @@ class TrainerController extends Controller
 
             } else {
                 // Getting the filtered query
-                $DBquery = $this->giveFilteredQuery($request, $filterValues);
+                $DBquery = Trainer::giveFilteredQuery($request, $filterValues);
             }
 
             if ($request->paginate) {
@@ -238,120 +212,4 @@ class TrainerController extends Controller
     }
 
 
-    protected function giveFilteredQuery(TrainerRequest $request, &$filterValues)
-    {
-
-        $DBquery = "SELECT * FROM trainers";
-
-        // Dynamically building the query string for the required filters only
-        if ($request->has('name') && !empty($request->query('name'))) {
-            $filterFields[] = "trainer_name LIKE?";
-            $filterValues[] = "%" . $request->name . "%";
-        }
-
-        if ($request->has('email') && !empty($request->query('email'))) {
-            $filterFields[] = "trainer_email LIKE?";
-            $filterValues[] = "%" . $request->email . "%";
-        }
-
-        if ($request->has('CNIC') && !empty($request->query('CNIC'))) {
-            $filterFields[] = "CNIC LIKE?";
-            $filterValues[] = "%" . $request->CNIC . "%";
-        }
-
-        if ($request->has('gender') && !empty($request->query('gender'))) {
-            $filterFields[] = "gender= ?";
-            $filterValues[] = $request->gender;
-        }
-
-        if ($request->has('maxAge') && !empty($request->query('maxAge'))) {
-            $filterFields[] = "age <= ?";
-            $filterValues[] = $request->maxAge;
-        }
-
-        if ($request->has('minAge') && !empty($request->query('minAge'))) {
-            $filterFields[] = "age >= ?";
-            $filterValues[] = $request->minAge;
-        }
-
-        if ($request->has('minSalary') && !empty($request->query('minSalary'))) {
-            $filterFields[] = "salary >= ?";
-            $filterValues[] = $request->minSalary;
-        }
-
-        if ($request->has('maxSalary') && !empty($request->query('maxSalary'))) {
-            $filterFields[] = "salary <= ?";
-            $filterValues[] = $request->maxSalary;
-        }
-
-        if ($request->has('availability') && !empty($request->query('availability'))) {
-            $filterFields[] = "availability=?";
-            if ($request->availability == 'active')
-                $filterValues[] = 1;
-            else if ($request->availability == 'inactive')
-                $filterValues[] = 0;
-        }
-
-        if ($request->has('maxExperience') && !empty($request->query('maxExperience'))) {
-            $filterFields[] = "experience <=?";
-            $filterValues[] = $request->maxExperience;
-        }
-        if ($request->has('minExperience') && !empty($request->query('minExperience'))) {
-            $filterFields[] = "experience >=?";
-            $filterValues[] = $request->minExperience;
-        }
-
-        if ($request->has('startHireDate') && !empty($request->query('startHireDate'))) {
-            $filterFields[] = "hire_date >=?";
-            $filterValues[] = $request->startHireDate;
-        }
-        if ($request->has('endHireDate') && !empty($request->query('endHireDate'))) {
-            $filterFields[] = "hire_date <=?";
-            $filterValues[] = $request->endHireDate;
-        }
-        if ($request->has('minRating') && !empty($request->query('minRating'))) {
-            $filterFields[] = "rating >=?";
-            $filterValues[] = $request->minRating;
-        }
-        if ($request->has('maxRating') && !empty($request->query('maxRating'))) {
-            $filterFields[] = "rating <=?";
-            $filterValues[] = $request->maxRating;
-        }
-
-        $orderByQuery = "";
-        $orderByQueryFields = [];
-
-        // Dynamically building the order by query string for the required fields only
-        if ($request->has('orderByName') && !empty($request->query('orderByName'))) {
-            $orderByQueryFields[] = "name " . $request->orderByName;
-        }
-
-        if ($request->has('orderBySalary') && !empty($request->query('orderBySalary'))) {
-            $orderByQueryFields[] = "salary " . $request->orderBySalary;
-        }
-
-        if ($request->has('orderByHireDate') && !empty($request->query('orderByHireDate'))) {
-            $orderByQueryFields[] = "hire_date " . $request->orderByHireDate;
-        }
-
-        if ($request->has('orderByRating') && !empty($request->query('orderByRating'))) {
-            $orderByQueryFields[] = "rating " . $request->orderByRating;
-        }
-
-        if (!empty($orderByQueryFields)) {
-            $orderByQuery = "ORDER BY " . implode(',', $orderByQueryFields);
-        }
-
-        if (!empty($filterFields)) {
-            // Concatenating the filtered query fields
-            $DBquery = $DBquery . " WHERE " . implode(" AND ", $filterFields);
-        }
-
-        // Conactinating the order by query
-        $DBquery .= " " . $orderByQuery;
-
-
-        return $DBquery;
-
-    }
 }
