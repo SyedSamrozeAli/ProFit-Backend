@@ -6,6 +6,7 @@ use App\Http\Requests\TrainerRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class Trainer extends Model
 {
@@ -15,10 +16,11 @@ class Trainer extends Model
 
     static public function addTrainer(TrainerRequest $request)
     {
+        $age = Carbon::parse($request->DOB)->age;
         // Store the trainer data in the database
         DB::statement(
-            "INSERT INTO trainers (trainer_name,trainer_email,CNIC,gender,DOB,phone_number,trainer_address,experience,salary,availability,rating)
-            VALUES(?,?,?,?,?,?,?,?,?,?,?)
+            "INSERT INTO trainers (trainer_name,trainer_email,CNIC,gender,DOB,age,phone_number,trainer_address,experience,salary,availability,rating)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
         
         ",
             [
@@ -27,6 +29,7 @@ class Trainer extends Model
                 $request->CNIC,
                 $request->gender,
                 $request->DOB,
+                $age,
                 $request->phone_number,
                 $request->trainer_address,
                 $request->experience,
