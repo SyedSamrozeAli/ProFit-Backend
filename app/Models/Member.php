@@ -6,7 +6,7 @@ use App\Http\Requests\MemberRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Carbon;
 class Member extends Model
 {
     use HasFactory;
@@ -52,11 +52,13 @@ class Member extends Model
     {
         // Calculating the BMI 
         $BMI = $request->weight / (($request->height) * ($request->height));
+        $age = Carbon::parse($request->DOB)->age;
+
         // Inserting member data into members table
         DB::insert(
             "INSERT INTO members 
-                    (name, member_email, phone_number, address, CNIC, DOB, trainer_id, height, weight, bmi, profile_image, health_issues, user_status, addmission_date)
-                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                    (name, member_email, phone_number, address, CNIC, DOB,age, trainer_id, height, weight, bmi, profile_image, health_issues, user_status, addmission_date)
+                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
             ,
             [
                 $request->name,
@@ -65,6 +67,7 @@ class Member extends Model
                 $request->address,
                 $request->CNIC,
                 $request->DOB,
+                $age,
                 $request->trainer_id,
                 $request->height,
                 $request->weight,
