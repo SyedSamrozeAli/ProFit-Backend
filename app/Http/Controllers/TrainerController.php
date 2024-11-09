@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TrainerRequest;
 use App\Http\Resources\TrainerResource;
 use App\Models\Trainer;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Carbon;
 class TrainerController extends Controller
 {
     protected $pageNo = 1;
@@ -79,11 +77,6 @@ class TrainerController extends Controller
                 $updateValues[] = $request->CNIC;
             }
 
-            if ($request->has('age')) {
-                $updateFields[] = "age = ?";
-                $updateValues[] = $request->age;
-            }
-
             if ($request->has('gender')) {
                 $updateFields[] = "gender = ?";
                 $updateValues[] = $request->gender;
@@ -92,6 +85,10 @@ class TrainerController extends Controller
             if ($request->has('DOB')) {
                 $updateFields[] = "DOB = ?";
                 $updateValues[] = $request->DOB;
+
+                $age = Carbon::parse($request->DOB)->age;
+                $updateFields[] = "age = ?";
+                $updateValues[] = $age;
             }
 
             if ($request->has('phone_number')) {
