@@ -181,6 +181,8 @@ class Trainer extends Model
 
     static public function deleteMember($memberId)
     {
+        $null = null;
         DB::delete("DELETE FROM trainers_have_members WHERE member_id=?", [$memberId]);
+        DB::update("UPDATE members SET trainer_id=? WHERE member_id=?", [NULL, $memberId]);
     }
 }
