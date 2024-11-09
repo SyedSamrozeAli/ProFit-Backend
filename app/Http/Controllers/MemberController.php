@@ -122,10 +122,6 @@ class MemberController extends Controller
                     $updateValues[] = $request->CNIC;
                 }
 
-                if ($request->has('age')) {
-                    $updateFields[] = "age = ?";
-                    $updateValues[] = $request->age;
-                }
 
                 if ($request->has('gender')) {
                     $updateFields[] = "gender = ?";
@@ -135,6 +131,10 @@ class MemberController extends Controller
                 if ($request->has('DOB')) {
                     $updateFields[] = "DOB = ?";
                     $updateValues[] = $request->DOB;
+
+                    $age = Carbon::parse($request->DOB)->age;
+                    $updateFields[] = "age = ?";
+                    $updateValues[] = $age;
                 }
 
                 if ($request->has('phone_number')) {
@@ -147,14 +147,16 @@ class MemberController extends Controller
                     $updateValues[] = $request->member_address;
                 }
 
-                if ($request->has('weight')) {
+                if ($request->has('weight') && $request->has('height')) {
                     $updateFields[] = "weight = ?";
                     $updateValues[] = $request->weight;
-                }
 
-                if ($request->has('height')) {
                     $updateFields[] = "height = ?";
                     $updateValues[] = $request->height;
+
+                    $BMI = $request->weight / (($request->height) * ($request->height));
+                    $updateFields[] = "BMI =?";
+                    $updateValues[] = $BMI;
                 }
 
                 if ($request->has('health_issues')) {
