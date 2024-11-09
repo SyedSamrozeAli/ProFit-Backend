@@ -48,9 +48,11 @@ class MemberRequest extends FormRequest
                 return [
                     'name' => 'string|min:3|max:50',
                     'member_email' => ['email', 'unique:members,member_email,' . $memberId . ',member_id'], // memberId is concatenated so that unique values are check by ignoring the current memberId
-                    'CNIC' => 'string',// we have to add unique constraint and 13 characters constraint in CNIC but in the end.
+                    'CNIC' => ['string', 'unique:members,CNIC,' . $memberId . ',member_id'],
                     'gender' => 'string|in:male,female',
-                    'DOB' => 'date|after_or_equal:2010-01-01',
+                    'DOB' => 'date|before_or_equal:2010-01-01',
+                    'weight' => 'required|numeric|min:20',
+                    'height' => 'required|numeric|min:0',
                     'phone_number' => 'string|min:10|max:15|unique:members,phone_number',
                     'member_profile_image' => 'string|unique:members',
                     'address' => 'string|min:10|max:100',
