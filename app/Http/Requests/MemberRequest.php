@@ -27,7 +27,6 @@ class MemberRequest extends FormRequest
                     'name' => 'required|string|max:255',
                     'member_email' => 'required|email|max:255|unique:members,member_email',
                     'CNIC' => 'required|string|min:13|max:13|unique:members,CNIC',
-                    'age' => 'required|integer|min:15',
                     'weight' => 'required|numeric|min:25',
                     'height' => 'required|numeric|min:0',
                     'address' => 'required|string|max:255',
@@ -41,6 +40,31 @@ class MemberRequest extends FormRequest
                     'addmission_date' => 'required|date',
                     'membership_duration' => 'required|integer|in:3,6,12'
                 ];
+            // Validations for updating a trainer    
+            case 'PUT':
+
+                $memberId = $this->route('memberId'); // Assuming the member ID is passed in the route
+
+                return [
+                    'name' => 'string|min:3|max:50',
+                    'member_email' => ['email', 'unique:members,member_email,' . $memberId . ',member_id'], // memberId is concatenated so that unique values are check by ignoring the current memberId
+                    'CNIC' => ['string', 'unique:members,CNIC,' . $memberId . ',member_id'],
+                    'gender' => 'string|in:male,female',
+                    'DOB' => 'date|before_or_equal:2010-01-01',
+                    'weight' => 'required|numeric|min:20',
+                    'height' => 'required|numeric|min:0',
+                    'phone_number' => 'string|min:10|max:15|unique:members,phone_number',
+                    'member_profile_image' => 'string|unique:members',
+                    'address' => 'string|min:10|max:100',
+                    'health_issues' => 'nullable|string|max:255',
+                    'profile_image' => 'nullable|string|max:255',
+                    'membership_type' => 'in:Standard,Premium',
+                    'trainer_id' => 'nullable|integer|exists:trainers,trainer_id|required_if:membership_type,Premium|prohibited_if:membership_type,Standard',
+                    'addmission_date' => 'date',
+                    'membership_duration' => 'integer|in:3,6,12'
+                ];
+            default:
+                return [];
         }
 
     }
