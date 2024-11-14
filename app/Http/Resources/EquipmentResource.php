@@ -16,9 +16,13 @@ class EquipmentResource extends JsonResource
     {
 
         return [
+            'equipment_id'=>$this->equipment_id,
             'item_name' => $this->equipment_name,
+            'category' => $this->category,
             'quantity' => $this->quantity,
-            'status' => $this->equipment_status
+            'price' => $this->price,
+            'status' => $this->equipment_status,
+            'description'=>$this->description
         ];
     }
 }
