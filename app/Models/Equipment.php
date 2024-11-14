@@ -61,8 +61,8 @@ class Equipment extends Model
 
     static public function getEquipment($equipId)
     {
-        
-        return ( DB::select("SELECT * FROM equipments WHERE equipment_id=?", [$equipId])[0]);
+
+        return (DB::select("SELECT * FROM equipments WHERE equipment_id=?", [$equipId])[0]);
     }
 
     static public function getValue($value, $id)
@@ -74,6 +74,16 @@ class Equipment extends Model
     {
         DB::update($updateQuery, $updateValues);
 
+    }
+
+    static public function getAllEquipments()
+    {
+        return DB::select("SELECT * FROM equipments");
+    }
+
+    static public function deleteEquipment($equipId)
+    {
+        return DB::delete("DELETE FROM equipments WHERE equipment_id=?", [$equipId]);
     }
 
 }
