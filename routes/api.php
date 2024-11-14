@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\TrainerController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,10 @@ Route::middleware(['authenticate'])->group(function () {
     Route::get('/inventory/{inventoryId}', [InventoryController::class, 'getSpecificInventory'])->name('getSpecificInventory');
     Route::put('/inventory/{inventoryId}', [InventoryController::class, 'updateInventory']);
     Route::delete('/inventory/{inventoryId}', [InventoryController::class, 'deleteInventory']);
+
+    //Equipment Routes
+    Route::get('/equipment', [EquipmentController::class, 'getEquipments']);
+    Route::delete('/equipment/{equipmentId}', [EquipmentController::class, 'deleteEquipments']);
 });
 
 
