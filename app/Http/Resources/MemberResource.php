@@ -28,8 +28,9 @@ class MemberResource extends JsonResource
                 $routeName = $request->route()->getName();
 
                 // Attempt to get trainer's name, handling cases where the trainer might not be found
-                $trainer = DB::select("SELECT trainer_name FROM trainers T JOIN trainers_have_members TM ON T.trainer_id=TM.trainer_id WHERE member_id=?", [$this->member_id]);
+                $trainer = DB::select("SELECT trainer_name,T.trainer_id FROM trainers T JOIN trainers_have_members TM ON T.trainer_id=TM.trainer_id WHERE member_id=?", [$this->member_id]);
                 $trainerName = !empty($trainer) ? $trainer[0]->trainer_name : null;
+                $trainerId = !empty($trainer) ? $trainer[0]->trainer_id : null;
 
                 if ($routeName == 'getSpecificMember') {
                     return [
@@ -49,7 +50,7 @@ class MemberResource extends JsonResource
                         'profile_image' => $this->profile_image,
                         'health_issues' => $this->health_issues,
                         'addmission_date' => $this->addmission_date,
-                        'trainer_id' => $this->trainer_id,
+                        'trainer_id' => $trainerId,
                         'trainer_name' => $trainerName,
                         'membership_type' => $membershipData->membership_type ?? null,
                         'price' => $membershipData->price ?? null,
