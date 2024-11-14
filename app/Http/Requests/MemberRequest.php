@@ -63,6 +63,8 @@ class MemberRequest extends FormRequest
                     'addmission_date' => 'date',
                     'membership_duration' => 'integer|in:3,6,12'
                 ];
+            default:
+                return [];
         }
 
     }
