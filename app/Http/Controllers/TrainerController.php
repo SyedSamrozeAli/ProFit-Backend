@@ -14,14 +14,19 @@ class TrainerController extends Controller
 
     public function storeTrainer(TrainerRequest $request)
     {
+        try {
+            DB::beginTransaction();
+            Trainer::addTrainer($request);
 
-        Trainer::addTrainer($request);
+            // Finding the newly added trainer
+            $newTrainer = Trainer::findTrainer('trainer_email', $request->trainer_email);
 
-        // Finding the newly added trainer
-        $newTrainer = Trainer::findTrainer('trainer_email', $request->trainer_email);
-
-        // Return a success response with the trainer data
-        return successResponse("Trainer added successfully", TrainerResource::make($newTrainer[0]));
+            // Return a success response with the trainer data
+            DB::commit();
+            return successResponse("Trainer added successfully", TrainerResource::make($newTrainer[0]));
+        } catch (\Exception $e) {
+            return errorResponse($e->getMessage());
+        }
 
     }
 
@@ -55,6 +60,7 @@ class TrainerController extends Controller
     public function updateTrainer(TrainerRequest $request, $trainerId)
     {
         try {
+            DB::beginTransaction();
             // Initialize the update query and bind parameters array
             $updateQuery = "UPDATE trainers SET ";
             $updateFields = [];
@@ -130,15 +136,17 @@ class TrainerController extends Controller
             $updatedTrainer = Trainer::findTrainer('trainer_id', $trainerId);
 
             if (!empty($updatedTrainer)) {
-
+                DB::commit();
                 // Return a success response with the updated trainer data
                 return successResponse("Trainer updated successfully", TrainerResource::make($updatedTrainer[0]));
 
             } else {
+                DB::rollBack();
                 return errorResponse("Trainer not found", 404);
             }
 
         } catch (\Exception $e) {
+            DB::rollBack();
             return errorResponse($e->getMessage());
         }
     }
@@ -147,17 +155,21 @@ class TrainerController extends Controller
     public function deleteTrainer($trainerId)
     {
         try {
+            DB::beginTransaction();
             // Delete the trainer from the database
             $deletedRows = DB::delete("DELETE FROM trainers WHERE trainer_id = ?", [$trainerId]);
 
             // Check if any row was actually deleted
             if ($deletedRows) {
+                DB::commit();
                 return successResponse("Trainer deleted successfully");
             } else {
+                DB::rollBack();
                 return errorResponse("Trainer not found", 404);
             }
 
         } catch (\Exception $e) {
+            DB::rollBack();
             return errorResponse($e->getMessage());
         }
     }
