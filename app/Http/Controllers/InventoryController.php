@@ -7,23 +7,25 @@ use App\Http\Resources\InventoryResource;
 use App\Models\Equipment;
 use App\Models\Inventory;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
+
 class InventoryController extends Controller
 {
 
     public function storeInventory(InventoryRequest $request)
     {
         try {
+            DB::beginTransaction();
             $newInventoryId = Inventory::addInventory($request);
 
             // Finding the newly added Inventory
             $newInventory = Inventory::findInventory('inventory_id', $newInventoryId);
 
             // Return a success response with the Inventory data
+            DB::commit();
             return successResponse("Inventory added successfully", new InventoryResource($newInventory[0]));
 
         } catch (\Exception $e) {
-
+            DB::rollback();
             return errorResponse($e->getMessage());
         }
 
@@ -61,7 +63,7 @@ class InventoryController extends Controller
     public function updateInventory(InventoryRequest $request, $InventoryId)
     {
         try {
-
+            DB::beginTransaction();
             $equipmentId = Inventory::getValue('equipment_id', $InventoryId);
 
             // Initialize the update query and bind parameters array
@@ -165,15 +167,17 @@ class InventoryController extends Controller
             $updatedInventory = Inventory::findInventory('inventory_id', $InventoryId);
 
             if (!empty($updatedInventory)) {
-
+                DB::commit();
                 // Return a success response with the updated Inventory data
                 return successResponse("Inventory updated successfully", InventoryResource::make($updatedInventory[0]));
 
             } else {
+                DB::rollback();
                 return errorResponse("Inventory not found", 404);
             }
 
         } catch (\Exception $e) {
+            DB::rollBack();
             return errorResponse($e->getMessage());
         }
     }
@@ -182,7 +186,7 @@ class InventoryController extends Controller
     public function deleteInventory($InventoryId)
     {
         try {
-
+            DB::beginTransaction();
             // Find the Equipment ID associated with the Inventory
             $equipmentId = Inventory::getValue('equipment_id', $InventoryId);
 
@@ -204,12 +208,15 @@ class InventoryController extends Controller
 
             // Check if any row was actually deleted
             if ($deletedRows) {
+                DB::commit();
                 return successResponse("Inventory deleted successfully");
             } else {
+                DB::rollback();
                 return errorResponse("Inventory not found", 404);
             }
 
         } catch (\Exception $e) {
+            DB::rollBack();
             return errorResponse($e->getMessage());
         }
     }
@@ -218,16 +225,19 @@ class InventoryController extends Controller
     public function getInventories(InventoryRequest $request)
     {
         try {
+            DB::beginTransaction();
             $inventories = Inventory::getInventories();
 
             // Check if Inventories are found
             if (!empty($inventories)) {
+                DB::commit();
                 return successResponse("Inventories retrieved successfully", InventoryResource::collection($inventories), $request->paginate);
             }
 
             return errorResponse("No Inventories found", 404);
 
         } catch (\Exception $e) {
+            DB::rollBack();
             return errorResponse($e->getMessage());
         }
     }
