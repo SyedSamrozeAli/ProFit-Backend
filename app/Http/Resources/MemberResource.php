@@ -14,21 +14,25 @@ class MemberResource extends JsonResource
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
-    {        // Get the current HTTP method
+    {
+        // Get the current HTTP method
         $method = $request->method();
         switch ($method) {
-
             case 'GET':
-
                 // Extracting membership details for the member
                 $membership = DB::select("SELECT * FROM member_has_membership ME JOIN memberships M ON ME.membership_id=M.membership_id WHERE member_id=?", [$this->member_id]);
 
+                // Check if membership details were found
+                $membershipData = !empty($membership) ? $membership[0] : null;
+
                 $routeName = $request->route()->getName();
 
+                // Attempt to get trainer's name, handling cases where the trainer might not be found
+                $trainer = DB::select("SELECT trainer_name FROM trainers T JOIN trainers_have_members TM ON T.trainer_id=TM.trainer_id WHERE member_id=?", [$this->member_id]);
+                $trainerName = !empty($trainer) ? $trainer[0]->trainer_name : null;
+
                 if ($routeName == 'getSpecificMember') {
-
                     return [
-
                         'member_id' => $this->member_id,
                         'member_name' => $this->name,
                         'member_email' => $this->member_email,
@@ -46,30 +50,28 @@ class MemberResource extends JsonResource
                         'health_issues' => $this->health_issues,
                         'addmission_date' => $this->addmission_date,
                         'trainer_id' => $this->trainer_id,
-                        'trainer_name' => (DB::select("SELECT trainer_name FROM trainers WHERE trainer_id=?", [$this->trainer_id]))[0]->trainer_name,
-                        'membership_type' => $membership[0]->membership_type,
-                        'price' => $membership[0]->price,
-                        'start_date' => $membership[0]->start_date,
-                        'end_date' => $membership[0]->end_date,
-
+                        'trainer_name' => $trainerName,
+                        'membership_type' => $membershipData->membership_type ?? null,
+                        'price' => $membershipData->price ?? null,
+                        'start_date' => $membershipData->start_date ?? null,
+                        'end_date' => $membershipData->end_date ?? null,
                     ];
-
-                    // when request through getAllMembers 
-                } else
-
+                } else {
                     return [
                         'member_id' => $this->member_id,
                         'member_name' => $this->name,
-                        'trainer_name' => (DB::select("SELECT trainer_name FROM trainers WHERE trainer_id=?", [$this->trainer_id]))[0]->trainer_name,
-                        'membership_type' => $membership[0]->membership_type,
-                        'price' => $membership[0]->price,
-                        'start_date' => $membership[0]->start_date,
-                        'end_date' => $membership[0]->end_date,
+                        'trainer_name' => $trainerName,
+                        'membership_type' => $membershipData->membership_type ?? null,
+                        'price' => $membershipData->price ?? null,
+                        'start_date' => $membershipData->start_date ?? null,
+                        'end_date' => $membershipData->end_date ?? null,
                         'member_status' => $this->user_status,
                     ];
+                }
 
             default:
                 return [];
         }
     }
+
 }
