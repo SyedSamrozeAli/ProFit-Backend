@@ -37,7 +37,7 @@ class TrainerRequest extends FormRequest
                 return [
                     'trainer_name' => 'required|string|min:3|max:50',
                     'trainer_email' => 'required|email|unique:trainers,trainer_email',
-                    'CNIC' => ['required|string|min:13|max:13|unique:trainers,CNIC' . $trainerId . ',trainer_id'],
+                    'CNIC' => ['required,string,min:13,max:13,unique:trainers,CNIC' . $trainerId . ',trainer_id'],
                     'gender' => 'required|string|in:male,female',
                     'DOB' => 'required|date|before_or_equal:2010-01-01',
                     'phone_number' => 'required|string|min:11|max:11|unique:trainers,phone_number',
@@ -45,6 +45,7 @@ class TrainerRequest extends FormRequest
                     'trainer_address' => 'required|string|min:10|max:255',
                     'experience' => 'required|integer|min:1|max:100',
                     'salary' => 'required|numeric|min:1000',
+                    'rating' => 'required|numeric|min:0|max:5'
                 ];
 
             // Validations for updating a trainer    
@@ -55,7 +56,7 @@ class TrainerRequest extends FormRequest
                 return [
                     'trainer_name' => 'string|min:3|max:50',
                     'trainer_email' => ['email', 'unique:trainers,trainer_email,' . $trainerId . ',trainer_id'], // trainerId is concatenated so that unique values are check by ignoring the current trainerId
-                    'CNIC' => ['string|min:13|max:13|unique:trainers,CNIC' . $trainerId . ',trainer_id'],
+                    'CNIC' => ['string,min:13,max:13,unique:trainers,CNIC' . $trainerId . ',trainer_id'],
                     'gender' => 'string|in:male,female',
                     'DOB' => 'date|before_or_equal:2010-01-01',
                     'phone_number' => 'string|min:10|max:15|unique:trainers,phone_number',
@@ -63,6 +64,7 @@ class TrainerRequest extends FormRequest
                     'trainer_address' => 'string|min:10|max:255',
                     'experience' => 'integer|min:1|max:20',
                     'salary' => 'numeric|min:1000',
+                    'rating' => 'numeric|min:0|max:5'
                 ];
 
             // Validations when getting filtered data for trainers    
