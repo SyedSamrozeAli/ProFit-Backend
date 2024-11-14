@@ -16,12 +16,16 @@ class InventoryResource extends JsonResource
     public function toArray(Request $request): array
     {
 
-        $equipmentData = EquipmentResource::make(Equipment::getEquipment($this->equipment_id));
+        $equipmentName = Equipment::getValue('equipment_name', $this->equipment_id);
 
         return [
             'inventory_id' => $this->inventory_id,
-            'equipment' => $equipmentData,
+            'equipment_name' => $equipmentName,
             'cost_per_unit' => $this->cost_per_unit,
+            'quantity' => $this->quantity,
+            'total_price' => $this->total_price,
+            'mantainance_date' => $this->mantainance_date,
+            'usage_duration' => $this->usage_duration,
             'purchase_date' => $this->purchase_date,
             'supplier_name' => $this->supplier_name,
             'warranty_period' => $this->warranty_period,
