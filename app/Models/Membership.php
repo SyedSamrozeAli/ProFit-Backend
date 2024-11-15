@@ -12,6 +12,38 @@ class Membership extends Model
 
     protected $table = 'membership';
     protected $primaryKey = 'memberhip_id';
+    // Create a new membership record
+    public static function createMembership($data)
+    {
+        return DB::insert("INSERT INTO memberships (membership_type) VALUES (?)", [$data['membership_type']]);
+    }
+
+    // Read a single membership record
+    public static function getMembershipById($membershipId)
+    {
+        return DB::select("SELECT * FROM memberships WHERE membership_id = ?", [$membershipId]);
+    }
+
+    // Read all membership records
+    public static function getAllMemberships()
+    {
+        return DB::select("SELECT * FROM memberships");
+    }
+
+    // Update a membership record
+    public static function membershipUpdate($membershipId, $data)
+    {
+        return DB::update("UPDATE memberships SET membership_type = ? WHERE membership_id = ?", [
+            $data['membership_type'],
+            $membershipId,
+        ]);
+    }
+
+    // Delete a membership record
+    public static function deleteMembership($membershipId)
+    {
+        return DB::delete("DELETE FROM memberships WHERE membership_id = ?", [$membershipId]);
+    }
 
     static public function getMembershipID($membershipType)
     {
@@ -37,5 +69,10 @@ class Membership extends Model
     static public function updateMembership($memberId, $price, $duration, $start_date, $end_date, $membershipId)
     {
         DB::update("UPDATE member_has_membership SET membership_id = ?, price=? , duration=? ,start_date=?, end_date=? WHERE member_id = ?", [$membershipId, $price, $duration, $start_date, $end_date, $memberId]);
+    }
+
+    static public function getMemberMembership($memberId)
+    {
+        return DB::select("SELECT membership_id FROM member_has_membership WHERE member_id = ?", [$memberId]);
     }
 }
