@@ -60,9 +60,6 @@ class MemberController extends Controller
                 // Adding the member into the member_has_membership table
                 Membership::addMemberIntoMembership($newMember[0]->member_id, $membership[0]->membership_id, $price, $membership_duration);
 
-                // Updating the member's membership_id in the members table to the newly created membership_id
-                Member::updateMemberMembershipId($membership[0]->membership_id, $newMember[0]->member_id);
-
             });
 
             return successResponse("Member added successfully");
@@ -165,8 +162,6 @@ class MemberController extends Controller
                 }
 
                 if ($request->has('trainer_id')) {
-                    $updateFields[] = "trainer_id = ?";
-                    $updateValues[] = $request->trainer_id;
                     Trainer::updateMember($request->trainer_id, $memberId);
                 }
 
@@ -190,6 +185,10 @@ class MemberController extends Controller
                     $endDate = Carbon::parse($request->start_date)->addMonths($membership_duration);
                     // Getting the membership ID based on the membership type provided in the request
                     $membership = Membership::getMembershipID($request->membership_type);
+
+                    // Getting the current membership of the member
+                    $currentMembership = Membership::getMemberMembership($memberId);
+
                     if ($request->membership_type == 'Premium') {
 
                         if ($membership_duration == 3) {
@@ -200,7 +199,10 @@ class MemberController extends Controller
                             $price = 172000; // 172k for 12 months
                         }
 
-                        Trainer::addMember($request->trainer_id, $memberId);
+                        // If the membership is changing from 'Standard' --> 'Premium' only then we will add
+                        // the member in trainer's table.
+                        if ($currentMembership[0]->membership_id == 1)
+                            Trainer::addMember($request->trainer_id, $memberId);
 
                     } else if ($request->membership_type == 'Standard') {
 
