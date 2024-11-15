@@ -36,7 +36,7 @@ class MemberRequest extends FormRequest
                     'DOB' => 'required|date|before:today',
                     'profile_image' => 'nullable|string|max:255',
                     'membership_type' => 'required|in:Standard,Premium',
-                    'trainer_id' => 'nullable|integer|exists:trainers,trainer_id|required_if:membership_type,premium|prohibited_if:membership_type,standard',
+                    'trainer_id' => 'nullable|integer|exists:trainers,trainer_id|required_if:membership_type,Premium|prohibited_if:membership_type,Standard',
                     'addmission_date' => 'required|date',
                     'membership_duration' => 'required|integer|in:3,6,12'
                 ];
