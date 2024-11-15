@@ -3,9 +3,10 @@
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\TrainerController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------|
@@ -42,6 +43,13 @@ Route::middleware(['authenticate'])->group(function () {
     //Equipment Routes
     Route::get('/equipment', [EquipmentController::class, 'getEquipments']);
     Route::delete('/equipment/{equipmentId}', [EquipmentController::class, 'deleteEquipments']);
+
+    //Membership Routes
+    Route::get('/membership', [MembershipController::class, 'getAllMemberships']);
+    Route::post('/membership', [MembershipController::class, 'addMembership']);
+    Route::get('/membership/{membershipId}', [MembershipController::class, 'getSpecificMembership']);
+    Route::put('/membership/{membershipId}', [MembershipController::class, 'updateMembership']);
+    Route::delete('/membership/{membershipId}', [MembershipController::class, 'deleteMembership']);
 });
 
 
