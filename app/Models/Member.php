@@ -54,6 +54,11 @@ class Member extends Model
         $BMI = $request->weight / (($request->height) * ($request->height));
         $age = Carbon::parse($request->DOB)->age;
 
+        // Adding profile image
+        $profileImage = $request->file('profile_image');
+        $imageName = time() . '.' . $profileImage->getClientOriginalExtension();
+        $profileImage->move('images/member/', $imageName);
+
         // Inserting member data into members table
         DB::insert(
             "INSERT INTO members 
@@ -72,7 +77,7 @@ class Member extends Model
                 $request->height,
                 $request->weight,
                 $BMI,
-                $request->profile_image,
+                $imageName,
                 $request->health_issues,
                 'active',
                 $request->addmission_date
@@ -83,11 +88,6 @@ class Member extends Model
     static public function getMemberId($CNIC)
     {
         return DB::select("SELECT member_id FROM members WHERE CNIC=?", [$CNIC]);
-    }
-
-    static public function updateMemberMembershipId($membershipId, $memberId)
-    {
-        DB::update("UPDATE members SET membership_id=? WHERE member_id=?", [$membershipId, $memberId]);
     }
 
     static public function updateMember($updateQuery, $updateValues)
