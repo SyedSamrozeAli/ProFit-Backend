@@ -4,8 +4,10 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\TrainerAttendanceController;
 use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberAttendanceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,8 +19,10 @@ use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
 Route::post('/admin/auth/login', [AdminAuthController::class, 'Login']);
+Route::get('/admin/auth/logout', [AdminAuthController::class, 'Logout']);
 
 Route::middleware(['authenticate'])->group(function () {
+
     //Member Routes
     Route::get('/member', [MemberController::class, 'getMembers']);
     Route::get('/member/{memberId}', [MemberController::class, 'getSpecificMember'])->name('getSpecificMember');
@@ -50,6 +54,16 @@ Route::middleware(['authenticate'])->group(function () {
     Route::get('/membership/{membershipId}', [MembershipController::class, 'getSpecificMembership']);
     Route::put('/membership/{membershipId}', [MembershipController::class, 'updateMembership']);
     Route::delete('/membership/{membershipId}', [MembershipController::class, 'deleteMembership']);
+
+    //Member Attendance Routes
+    Route::get('/member-attendance', [MemberAttendanceController::class, 'getAttendance']);
+    Route::post('/member-attendance', [MemberAttendanceController::class, 'addAttendance']);
+    Route::put('/member-attendance', [MemberAttendanceController::class, 'updateAttendance']);
+
+    // Trainer Attendance Routes
+    Route::get('/trainer-attendance', [TrainerAttendanceController::class, 'getAttendance']);
+    Route::post('/trainer-attendance', [TrainerAttendanceController::class, 'addAttendance']);
+    Route::put('/trainer-attendance', [TrainerAttendanceController::class, 'updateAttendance']);
 });
 
 
