@@ -19,9 +19,11 @@ use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
 Route::post('/admin/auth/login', [AdminAuthController::class, 'Login']);
-Route::get('/admin/auth/logout', [AdminAuthController::class, 'Logout']);
 
 Route::middleware(['authenticate'])->group(function () {
+
+    //Logout Route
+    Route::get('/admin/auth/logout', [AdminAuthController::class, 'Logout']);
 
     //Member Routes
     Route::get('/member', [MemberController::class, 'getMembers']);
