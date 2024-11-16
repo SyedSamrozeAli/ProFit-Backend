@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminAuthRequest;
 use App\Http\Resources\AdminAuthResource;
-use Illuminate\Support\Facades\DB;
 use Auth;
 
 class AdminAuthController extends Controller
@@ -21,16 +20,21 @@ class AdminAuthController extends Controller
             'user' => auth()->user(),
         ];
 
-
-
         return successResponse("Login Successfully", AdminAuthResource::make($data));
 
 
     }
 
+    public function Logout()
+    {
+        // Invalidate the current user's token
+        auth()->logout();
+
+        return successResponse("Logged out successfully", null);
+    }
+
     protected function getToken(AdminAuthRequest $request)
     {
-
         return Auth::guard('api')->attempt($request->only('email', 'password'));
     }
 }
