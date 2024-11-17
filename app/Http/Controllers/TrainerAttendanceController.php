@@ -9,35 +9,12 @@ use App\Http\Resources\TrainerAttendanceResource;
 
 class TrainerAttendanceController extends Controller
 {
-    public function addAttendance(TrainerAttendanceRequest $request)
-    {
-        DB::beginTransaction();
-
-        try {
-            foreach ($request->attendance as $attend) {
-                TrainerAttendance::addAttendance(
-                    $attend['trainer_id'],
-                    $request->attendance_date,
-                    $attend['check_in_time'],
-                    $attend['check_out_time'],
-                    $attend['attendance_status']
-                );
-            }
-
-            DB::commit();
-            return successResponse("Attendance recorded successfully.", 201);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return errorResponse($e->getMessage(), 500);
-        }
-    }
-
 
     public function getAttendance(TrainerAttendanceRequest $request)
     {
         try {
 
-            $date = $request->query('date');
+            $date = $request->query('attendance_date');
 
             $attendances = TrainerAttendance::getAttendance($date);
 
@@ -50,24 +27,27 @@ class TrainerAttendanceController extends Controller
 
     }
 
-    public function updateAttendance(TrainerAttendanceRequest $request)
+    public function addAttendance(TrainerAttendanceRequest $request)
     {
         DB::beginTransaction();
 
         try {
-
-            foreach ($request->attendance as $attend) {
-                TrainerAttendance::updateAttendance(
-                    $attend['trainer_id'],
-                    $request->attendance_date,
-                    $attend['check_in_time'],
-                    $attend['check_out_time'],
-                    $attend['attendance_status']
+            foreach ($request->attendance as $attendance) {
+                TrainerAttendance::updateOrCreate(
+                    [
+                        'trainer_id' => $attendance['trainer_id'],
+                        'attendance_date' => $request->attendance_date,
+                    ],
+                    [
+                        'check_in_time' => $attendance['check_in_time'],
+                        'check_out_time' => $attendance['check_out_time'],
+                        'attendance_status' => $attendance['attendance_status'],
+                    ]
                 );
             }
 
             DB::commit();
-            return successResponse("Attendance updated successfully.", 201);
+            return successResponse("Attendance recorded successfully.", 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return errorResponse($e->getMessage(), 500);
