@@ -10,7 +10,7 @@ class MemberAttendance extends Model
 {
     use HasFactory;
 
-    protected $table = 'member_attendance';
+    protected $table = 'members_attendance';
     protected $primaryKey = 'member_attendance_id';
 
     protected $fillable = [
@@ -37,12 +37,25 @@ class MemberAttendance extends Model
      */
     public static function getAttendance($date = null)
     {
-        $query = "SELECT * FROM members_attendance WHERE 1=1";
+        $query = "  SELECT 
+                        M.member_id,
+                        M.name AS member_name,
+                        MA.attendance_date,
+                        MA.check_in_time, 
+                        MA.check_out_time,
+                        MA.attendance_status
+                    FROM 
+                        members M
+                    LEFT JOIN 
+                        members_attendance MA
+                    ON 
+                        M.member_id = MA.member_id AND MA.attendance_date = ?";
         $params = [];
 
         if ($date) {
-            $query .= " AND attendance_date = ?";
             $params[] = $date;
+        } else {
+            $params[] = NULL;
         }
 
         return DB::select($query, $params);
