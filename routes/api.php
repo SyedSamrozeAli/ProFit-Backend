@@ -60,12 +60,10 @@ Route::middleware(['authenticate'])->group(function () {
     //Member Attendance Routes
     Route::get('/member-attendance', [MemberAttendanceController::class, 'getAttendance']);
     Route::post('/member-attendance', [MemberAttendanceController::class, 'addAttendance']);
-    Route::put('/member-attendance', [MemberAttendanceController::class, 'updateAttendance']);
 
     // Trainer Attendance Routes
     Route::get('/trainer-attendance', [TrainerAttendanceController::class, 'getAttendance']);
     Route::post('/trainer-attendance', [TrainerAttendanceController::class, 'addAttendance']);
-    Route::put('/trainer-attendance', [TrainerAttendanceController::class, 'updateAttendance']);
 });
 
 
