@@ -62,8 +62,8 @@ class Member extends Model
         // Inserting member data into members table
         DB::insert(
             "INSERT INTO members 
-                    (name, member_email, phone_number, address, CNIC, DOB,age, trainer_id, height, weight, bmi, profile_image, health_issues, user_status, addmission_date)
-                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                    (name, member_email, phone_number, address, CNIC, DOB,age, height, weight, bmi, profile_image, health_issues, user_status, addmission_date)
+                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
             ,
             [
                 $request->name,
@@ -73,7 +73,6 @@ class Member extends Model
                 $request->CNIC,
                 $request->DOB,
                 $age,
-                $request->trainer_id,
                 $request->height,
                 $request->weight,
                 $BMI,
