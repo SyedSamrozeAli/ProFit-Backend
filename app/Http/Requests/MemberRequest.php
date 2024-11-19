@@ -34,7 +34,7 @@ class MemberRequest extends FormRequest
                     'health_issues' => 'nullable|string|max:255',
                     'phone_number' => 'required|string|max:15',
                     'DOB' => 'required|date|before:today',
-                    'profile_image' => 'nullable|string|max:255',
+                    'profile_image' => 'nullable',
                     'membership_type' => 'required|in:Standard,Premium',
                     'trainer_id' => 'nullable|integer|exists:trainers,trainer_id|required_if:membership_type,Premium|prohibited_if:membership_type,Standard',
                     'addmission_date' => 'required|date',
