@@ -11,28 +11,46 @@ class MemberPayments extends Model
 {
     use HasFactory;
 
-    static public function addPayment(MemberPaymentsRequest $req, $dues, $balance, $payment_status)
-    {
+    protected $table = 'members_payments';
 
-        $membership = Membership::getMembershipID($req->membership_type);
-        DB::insert("INSERT INTO members_payments (member_id,membership_id,payment_date,payment_amount,payment_status,paid_amount,dues,balance,payment_method)
-                    VALUES (?,?,?,?,?,?,?,?,?)",
+    protected $primaryKey = 'member_payment_id';
 
-            [
-                $req->member_id,
-                $membership[0]->membership_id,
-                $req->payment_date,
-                $req->payment_amount,
-                $payment_status,
-                $req->paid_amount,
-                $dues,
-                $balance,
-                $req->payment_method
+    protected $fillable =
+        [
+            'member_id',
+            'payment_date',
+            'membership_id',
+            'payment_amount',
+            'payment_status',
+            'paid_amount',
+            'dues',
+            'balance',
+            'payment_method',
+        ];
 
-            ]
-        );
+    // static public function addPayment(MemberPaymentsRequest $req, $dues, $balance, $payment_status)
+    // {
 
-    }
+    //     $membership = Membership::getMembershipID($req->membership_type);
+    //     DB::insert("INSERT INTO members_payments (member_id,membership_id,payment_date,payment_amount,payment_status,paid_amount,dues,balance,payment_method)
+    //                 VALUES (?,?,?,?,?,?,?,?,?)",
+
+    //         [
+    //             $req->member_id,
+    //             $membership[0]->membership_id,
+    //             $req->payment_date,
+    //             $req->payment_amount,
+    //             $payment_status,
+    //             $req->paid_amount,
+    //             $dues,
+    //             $balance,
+    //             $req->payment_method
+
+    //         ]
+    //     );
+
+    // }
+
 
     static public function getPaymentData($month, $year)
     {
@@ -64,17 +82,17 @@ class MemberPayments extends Model
         } else {
             $params[] = NULL;
         }
-        // dd($query, $params);
+
         return DB::select($query, $params);
 
 
-        // return DB::select("SELECT * FROM members_payments WHERE member_payment_id=?", [$paymentId]);
     }
 
-    static public function updatePayment($updateQuery, $updateValues)
-    {
-        return DB::update($updateQuery, $updateValues);
-    }
+    // static public function updatePayment($updateQuery, $updateValues)
+    // {
+    //     return DB::update($updateQuery, $updateValues);
+    // }
+
 
     static public function deletePayment($paymentId)
     {
