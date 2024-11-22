@@ -10,6 +10,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberAttendanceController;
 use App\Http\Controllers\MemberPaymentsController;
 use App\Http\Controllers\TrainerPaymentsController;
+use App\Http\Controllers\InventoryPaymentsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,14 +71,17 @@ Route::middleware(['authenticate'])->group(function () {
     // Member Payments Routes
     Route::get('/member-payment', [MemberPaymentsController::class, 'getPayments']);
     Route::post('/member-payment', [MemberPaymentsController::class, 'addPayment']);
-    Route::put('/member-payment/{paymentId}', [MemberPaymentsController::class, 'updatePayment']);
     Route::delete('/member-payment/{paymentId}', [MemberPaymentsController::class, 'deletePayment']);
 
     // Trainer Payments Routes
     Route::get('/trainer-payment', [TrainerPaymentsController::class, 'getPayments']);
     Route::post('/trainer-payment', [TrainerPaymentsController::class, 'addPayment']);
-    Route::put('/trainer-payment/{paymentId}', [TrainerPaymentsController::class, 'updatePayment']);
     Route::delete('/trainer-payment/{paymentId}', [TrainerPaymentsController::class, 'deletePayment']);
+
+    // Inventory Payments Routes
+    Route::get('/inventory-payment', [InventoryPaymentsController::class, 'getPayments']);
+    Route::post('/inventory-payment', [InventoryPaymentsController::class, 'addPayment']);
+    Route::delete('/inventory-payment/{paymentId}', [InventoryPaymentsController::class, 'deletePayment']);
 });
 
 
