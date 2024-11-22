@@ -11,27 +11,44 @@ class TrainerPayments extends Model
 {
     use HasFactory;
 
-    static public function addPayment(TrainerPaymentsRequest $req, $dues, $balance, $payment_status)
-    {
+    protected $table = 'trainers_payments';
+
+    protected $primaryKey = 'trainer_payment_id';
+
+    protected $fillable =
+        [
+            'trainer_id',
+            'payment_date',
+            'salary',
+            'payment_amount',
+            'payment_status',
+            'paid_amount',
+            'dues',
+            'balance',
+            'payment_method',
+        ];
+    // static public function addPayment(TrainerPaymentsRequest $req, $dues, $balance, $payment_status)
+    // {
 
 
-        DB::insert("INSERT INTO trainers_payments (trainer_id,payment_date,salary,payment_amount,payment_status,paid_amount,dues,balance,payment_method)
-                    VALUES (?,?,?,?,?,?,?,?,?)",
+    //     DB::insert("INSERT INTO trainers_payments (trainer_id,payment_date,salary,payment_amount,payment_status,paid_amount,dues,balance,payment_method)
+    //                 VALUES (?,?,?,?,?,?,?,?,?)",
 
-            [
-                $req->trainer_id,
-                $req->payment_date,
-                $req->salary,
-                $req->payment_amount,
-                $payment_status,
-                $req->paid_amount,
-                $dues,
-                $balance,
-                $req->payment_method
+    //         [
+    //             $req->trainer_id,
+    //             $req->payment_date,
+    //             $req->salary,
+    //             $req->payment_amount,
+    //             $payment_status,
+    //             $req->paid_amount,
+    //             $dues,
+    //             $balance,
+    //             $req->payment_method
 
-            ]
-        );
-    }
+    //         ]
+    //     );
+    // }
+
 
     static public function getPaymentData($month, $year)
     {
@@ -62,15 +79,16 @@ class TrainerPayments extends Model
         } else {
             $params[] = NULL;
         }
-        // dd($query, $params);
+
         return DB::select($query, $params);
 
     }
 
-    static public function updatePayment($updateQuery, $updateValues)
-    {
-        return DB::update($updateQuery, $updateValues);
-    }
+    // static public function updatePayment($updateQuery, $updateValues)
+    // {
+    //     return DB::update($updateQuery, $updateValues);
+    // }
+
 
     static public function deletePayment($paymentId)
     {

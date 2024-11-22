@@ -43,13 +43,6 @@ class TrainerPaymentsRequest extends FormRequest
                     'payment_method' => 'required|in:cash,online',
                     'paid_amount' => 'required|numeric|min:0',
                 ];
-            case 'PUT':
-                return [
-                    'payment_date' => 'date',
-                    'payment_amount' => 'required|numeric|min:0',
-                    'payment_method' => 'in:cash,online',
-                    'paid_amount' => 'required|numeric|min:0',
-                ];
             case 'GET':
 
                 return [
