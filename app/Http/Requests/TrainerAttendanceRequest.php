@@ -27,7 +27,7 @@ class TrainerAttendanceRequest extends FormRequest
 
             case 'GET':
                 return [
-                    'attendance_date' => 'exists:trainers_attendance,attendance_date'
+                    'attendance_date' => 'date'
                 ];
 
             case 'POST':
@@ -36,18 +36,8 @@ class TrainerAttendanceRequest extends FormRequest
                     'attendance_date' => 'required|date',
                     'attendance' => 'required|array',
                     'attendance.*.trainer_id' => 'required|exists:trainers,trainer_id',
-                    'attendance.*.check_in_time' => 'required|date_format:H:i:s',
-                    'attendance.*.check_out_time' => 'required|date_format:H:i:s|after:attendance.*.check_in_time',
-                    'attendance.*.attendance_status' => 'required|in:Present,Absent',
-                ];
-
-            case 'PUT':
-                return [
-                    'attendance_date' => 'required|date|exists:trainers_attendance,attendance_date',
-                    'attendance' => 'required|array',
-                    'attendance.*.trainer_id' => 'required|exists:trainers,trainer_id|exists:trainers_attendance,trainer_id',
-                    'attendance.*.check_in_time' => 'required|date_format:H:i:s',
-                    'attendance.*.check_out_time' => 'required|date_format:H:i:s|after:attendance.*.check_in_time',
+                    'attendance.*.check_in_time' => 'required_if:attendance.*.attendance_status,Present|nullable|date_format:H:i:s',
+                    'attendance.*.check_out_time' => 'required_if:attendance.*.attendance_status,Present|nullable|date_format:H:i:s|after:attendance.*.check_in_time',
                     'attendance.*.attendance_status' => 'required|in:Present,Absent',
                 ];
 
