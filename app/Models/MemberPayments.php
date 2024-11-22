@@ -24,16 +24,14 @@ class MemberPayments extends Model
                 $req->payment_date,
                 $req->payment_amount,
                 $payment_status,
-                $req->payment_amount,
+                $req->paid_amount,
                 $dues,
                 $balance,
-                $req->paid_method
+                $req->payment_method
 
             ]
         );
 
-        // Returning the id of the last inserted item
-        return DB::getPdo()->lastInsertId();
     }
 
     static public function getPaymentData($month, $year)
