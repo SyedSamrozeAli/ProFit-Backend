@@ -12,10 +12,10 @@ class TrainerPaymentsController extends Controller
     public function addPayment(TrainerPaymentsRequest $req)
     {
         try {
-
             DB::beginTransaction();
+
             $remaining_amount = $req->payment_amount - $req->paid_amount;
-            $payment_status = 2;  // 2 --> pending
+            $payment_status = 2; // 2 --> pending
             $dues = 0;
             $balance = 0;
 
@@ -24,27 +24,40 @@ class TrainerPaymentsController extends Controller
                 $dues = $remaining_amount;
 
                 if ($dues == 0) {
-                    $payment_status = 1;  // 1 --> completed
+                    $payment_status = 1; // 1 --> completed
                 }
             } else {
                 $balance = -$remaining_amount;
-                $payment_status = 1;  // 1 --> completed
-
+                $payment_status = 1; // 1 --> completed
             }
 
-            TrainerPayments::addPayment($req, $dues, $balance, $payment_status);
+            // Use updateOrCreate to handle insert/update logic
+            $payment = TrainerPayments::updateOrCreate(
+                [
+                    'trainer_id' => $req->trainer_id,
+                    'payment_month' => date('m', strtotime($req->payment_date)),
+                    'payment_year' => date('Y', strtotime($req->payment_date)),
+                ],
+                [
+                    'payment_date' => $req->payment_date,
+                    'salary'=>$req->salary,
+                    'payment_amount' => $req->payment_amount,
+                    'paid_amount' => $req->paid_amount,
+                    'dues' => $dues,
+                    'balance' => $balance,
+                    'payment_method' => $req->payment_method,
+                    'payment_status' => $payment_status,
+                ]
+            );
 
             DB::commit();
-            return successResponse("Record added successfully");
-
+            return successResponse("Record " . ($payment->wasRecentlyCreated ? "added" : "updated") . " successfully");
         } catch (\Exception $e) {
             DB::rollBack();
             return errorResponse($e->getMessage(), 500);
         }
-
-
-
     }
+
 
     public function updatePayment(TrainerPaymentsRequest $req, $paymentId)
     {
@@ -58,7 +71,7 @@ class TrainerPaymentsController extends Controller
 
             // Check which fields are present in the request and build the query accordingly
             // It will concatinate the values if the request contains multiple fields
-            if ($req->has('payment_amount') && $req->has('paid_amount')) {
+            if ($req->has('payment_amount') && $req->has('paid_amount') && $req->has('payment_date') && $req->has('payment_method')) {
                 // dd("here");
                 $remaining_amount = $req->payment_amount - $req->paid_amount;
                 $payment_status = 2;  // 2 --> pending
@@ -93,16 +106,12 @@ class TrainerPaymentsController extends Controller
                 $UpdateFields[] = "balance =?";
                 $UpdateValues[] = $balance;
 
-            }
-
-            if ($req->has('payment_date')) {
                 $UpdateFields[] = "payment_date =?";
                 $UpdateValues[] = $req->payment_date;
-            }
 
-            if ($req->has('payment_method')) {
                 $UpdateFields[] = "payment_method =?";
                 $UpdateValues[] = $req->payment_method;
+
             }
 
             if (empty($UpdateFields)) {
