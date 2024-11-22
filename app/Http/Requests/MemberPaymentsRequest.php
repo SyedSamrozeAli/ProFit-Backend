@@ -33,6 +33,7 @@ class MemberPaymentsRequest extends FormRequest
                     'payment_amount' => 'required|numeric|min:0',
                     'payment_method' => 'required|in:cash,online',
                     'paid_amount' => 'required|numeric|min:0',
+                    'payment_reciept' => 'nullable|file|mimes:png,jpg,pdf'
                 ];
 
             case 'GET':
