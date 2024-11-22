@@ -60,7 +60,6 @@ class MemberPayments extends Model
                         P.member_payment_id,
                         P.membership_id,
                         P.payment_date,
-                        P.membership_id,
                         P.payment_amount,
                         P.payment_status,
                         P.paid_amount,
