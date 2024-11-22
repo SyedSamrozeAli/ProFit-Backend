@@ -27,6 +27,7 @@ class TrainerPaymentsResource extends JsonResource
             'balance' => $this->balance,
             'payment_method' => $this->payment_method,
             'payment_status' => $this->payment_status == 1 ? "completed" : "pending",
+            'payment_reciept'=>$this->payment_reciept,
 
         ];
     }

@@ -63,7 +63,8 @@ class TrainerPayments extends Model
                         P.paid_amount,
                         P.payment_method,
                         P.dues,
-                        P.balance
+                        P.balance,
+                        P.payment_reciept
                     FROM 
                         trainers M
                     LEFT JOIN 

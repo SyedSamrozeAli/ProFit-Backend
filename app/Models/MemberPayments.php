@@ -66,7 +66,8 @@ class MemberPayments extends Model
                         P.paid_amount,
                         P.payment_method,
                         P.dues,
-                        P.balance
+                        P.balance,
+                        P.payment_reciept
                     FROM 
                         members M
                     LEFT JOIN 

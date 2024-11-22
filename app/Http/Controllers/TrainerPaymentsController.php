@@ -31,6 +31,12 @@ class TrainerPaymentsController extends Controller
                 $payment_status = 1; // 1 --> completed
             }
 
+            // Adding payment reciept image
+            if ($req->has('payment_reciept')) {
+                $paymentReciept = $req->file('payment_reciept');
+                $imageName = time() . '.' . $paymentReciept->getClientOriginalExtension();
+                $paymentReciept->move('images/trainer/paymentsReciepts', $imageName);
+            }
             // Use updateOrCreate to handle insert/update logic
             $payment = TrainerPayments::updateOrCreate(
                 [
@@ -40,13 +46,14 @@ class TrainerPaymentsController extends Controller
                 ],
                 [
                     'payment_date' => $req->payment_date,
-                    'salary'=>$req->salary,
+                    'salary' => $req->salary,
                     'payment_amount' => $req->payment_amount,
                     'paid_amount' => $req->paid_amount,
                     'dues' => $dues,
                     'balance' => $balance,
                     'payment_method' => $req->payment_method,
                     'payment_status' => $payment_status,
+                    'payment_reciept' => $imageName ?? null,
                 ]
             );
 

@@ -42,6 +42,7 @@ class TrainerPaymentsRequest extends FormRequest
                     ],
                     'payment_method' => 'required|in:cash,online',
                     'paid_amount' => 'required|numeric|min:0',
+                    'payment_reciept' => 'nullable|file|mimes:png,jpg,pdf'
                 ];
             case 'GET':
 
