@@ -9,6 +9,7 @@ use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberAttendanceController;
 use App\Http\Controllers\MemberPaymentsController;
+use App\Http\Controllers\TrainerPaymentsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -69,9 +70,14 @@ Route::middleware(['authenticate'])->group(function () {
     // Member Payments Routes
     Route::get('/member-payment', [MemberPaymentsController::class, 'getPayments']);
     Route::post('/member-payment', [MemberPaymentsController::class, 'addPayment']);
-    Route::get('/member-payment/{paymentId}', [MemberPaymentsController::class, 'getSpecificPayment']);
     Route::put('/member-payment/{paymentId}', [MemberPaymentsController::class, 'updatePayment']);
     Route::delete('/member-payment/{paymentId}', [MemberPaymentsController::class, 'deletePayment']);
+
+    // Trainer Payments Routes
+    Route::get('/trainer-payment', [TrainerPaymentsController::class, 'getPayments']);
+    Route::post('/trainer-payment', [TrainerPaymentsController::class, 'addPayment']);
+    Route::put('/trainer-payment/{paymentId}', [TrainerPaymentsController::class, 'updatePayment']);
+    Route::delete('/trainer-payment/{paymentId}', [TrainerPaymentsController::class, 'deletePayment']);
 });
 
 
