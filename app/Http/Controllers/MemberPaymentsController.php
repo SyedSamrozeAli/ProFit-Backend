@@ -33,6 +33,14 @@ class MemberPaymentsController extends Controller
                 $payment_status = 1; // 1 --> completed
             }
 
+            // Adding payment reciept image
+            if ($req->has('payment_reciept')) {
+
+                $paymentReciept = $req->file('payment_reciept');
+                $imageName = time() . '.' . $paymentReciept->getClientOriginalExtension();
+                $paymentReciept->move('images/member/paymentsReciepts', $imageName);
+            }
+
             $membership = Membership::getMembershipID($req->membership_type);
 
             // Use updateOrCreate to handle insert/update logic
@@ -51,6 +59,7 @@ class MemberPaymentsController extends Controller
                     'balance' => $balance,
                     'payment_method' => $req->payment_method,
                     'payment_status' => $payment_status,
+                    'payment_reciept' => $imageName ?? null,
                 ]
             );
 
