@@ -11,6 +11,7 @@ use App\Http\Controllers\MemberAttendanceController;
 use App\Http\Controllers\MemberPaymentsController;
 use App\Http\Controllers\TrainerPaymentsController;
 use App\Http\Controllers\InventoryPaymentsController;
+use App\Http\Controllers\OtherExpensePaymentsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -82,6 +83,11 @@ Route::middleware(['authenticate'])->group(function () {
     Route::get('/inventory-payment', [InventoryPaymentsController::class, 'getPayments']);
     Route::post('/inventory-payment', [InventoryPaymentsController::class, 'addPayment']);
     Route::delete('/inventory-payment/{paymentId}', [InventoryPaymentsController::class, 'deletePayment']);
+
+    // OtherExpense Payments Routes
+    Route::get('/other-expense-payment', [OtherExpensePaymentsController::class, 'getPayments']);
+    Route::post('/other-expense-payment', [OtherExpensePaymentsController::class, 'addExpense']);
+    Route::delete('/other-expense-payment/{paymentId}', [OtherExpensePaymentsController::class, 'deletePayment']);
 });
 
 

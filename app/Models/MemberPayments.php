@@ -58,7 +58,7 @@ class MemberPayments extends Model
                         M.member_id,
                         M.name AS member_name,
                         P.member_payment_id,
-                        P.membership_id,
+                        MM.membership_id,
                         P.payment_date,
                         P.payment_amount,
                         P.payment_status,
@@ -69,6 +69,10 @@ class MemberPayments extends Model
                         P.payment_reciept
                     FROM 
                         members M
+                    LEFT JOIN
+                        member_has_membership MM
+                    ON 
+                        M.member_id=MM.member_id
                     LEFT JOIN 
                         members_payments P
                     ON 
