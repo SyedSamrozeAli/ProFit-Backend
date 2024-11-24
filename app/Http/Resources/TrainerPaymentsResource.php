@@ -20,6 +20,7 @@ class TrainerPaymentsResource extends JsonResource
             'trainer_payment_id' => $this->trainer_payment_id,
             'trainer_id' => $this->trainer_id,
             'trainer_name' => $this->trainer_name,
+            'salary' => $this->salary,
             'payment_date' => $this->payment_date,
             'payment_amount' => $this->payment_amount,
             'paid_amount' => $this->paid_amount,
@@ -27,7 +28,7 @@ class TrainerPaymentsResource extends JsonResource
             'balance' => $this->balance,
             'payment_method' => $this->payment_method,
             'payment_status' => $this->payment_status == 1 ? "completed" : "pending",
-            'payment_reciept'=>$this->payment_reciept,
+            'payment_reciept' => $this->payment_reciept,
 
         ];
     }

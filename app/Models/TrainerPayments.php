@@ -55,9 +55,9 @@ class TrainerPayments extends Model
         $query = "  SELECT 
                         M.trainer_id,
                         M.trainer_name,
+                        M.salary,
                         P.trainer_payment_id,
                         P.payment_date,
-                        P.salary,
                         P.payment_amount,
                         P.payment_status,
                         P.paid_amount,
