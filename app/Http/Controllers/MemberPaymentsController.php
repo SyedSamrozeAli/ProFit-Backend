@@ -94,8 +94,10 @@ class MemberPaymentsController extends Controller
     {
         try {
 
-            $paymentsData = MemberPayments::getPaymentData($request->month, $request->year);
-
+            $paymentsData = MemberPayments::getPaymentData($request->month, $request->year, $request->memberId);
+            if (empty($paymentsData)) {
+                return errorResponse("No data found");
+            }
             return successResponse("Data retrieved successfully", MemberPaymentsResource::collection($paymentsData));
 
         } catch (\Exception $e) {
