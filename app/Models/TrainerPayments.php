@@ -50,7 +50,7 @@ class TrainerPayments extends Model
     // }
 
 
-    static public function getPaymentData($month, $year)
+    static public function getPaymentData($month, $year, $trainerId = null)
     {
         $query = "  SELECT 
                         M.trainer_id,
@@ -70,7 +70,9 @@ class TrainerPayments extends Model
                     LEFT JOIN 
                         trainers_payments P
                     ON 
-                        M.trainer_id = P.trainer_id AND EXTRACT(MONTH FROM P.payment_date) = ? AND EXTRACT(YEAR FROM P.payment_date) = ? ";
+                        M.trainer_id = P.trainer_id AND EXTRACT(MONTH FROM P.payment_date) = ? AND EXTRACT(YEAR FROM P.payment_date) = ? 
+                    WHERE 
+                        1=1";
 
         $params = [];
 
@@ -81,6 +83,10 @@ class TrainerPayments extends Model
             $params[] = NULL;
         }
 
+        if ($trainerId) {
+            $query .= " AND M.trainer_id =?";
+            $params[] = $trainerId;
+        }
         return DB::select($query, $params);
 
     }
