@@ -52,7 +52,7 @@ class MemberPayments extends Model
     // }
 
 
-    static public function getPaymentData($month, $year)
+    static public function getPaymentData($month, $year, $memberId = null)
     {
         $query = "  SELECT 
                         M.member_id,
@@ -76,7 +76,9 @@ class MemberPayments extends Model
                     LEFT JOIN 
                         members_payments P
                     ON 
-                        M.member_id = P.member_id AND EXTRACT(MONTH FROM P.payment_date) = ? AND EXTRACT(YEAR FROM P.payment_date) = ? ";
+                        M.member_id = P.member_id AND EXTRACT(MONTH FROM P.payment_date) = ? AND EXTRACT(YEAR FROM P.payment_date) = ? 
+                    WHERE 
+                        1=1";
 
         $params = [];
 
@@ -85,6 +87,11 @@ class MemberPayments extends Model
             $params[] = $year;
         } else {
             $params[] = NULL;
+        }
+
+        if ($memberId) {
+            $query .= " AND M.member_id =?";
+            $params[] = $memberId;
         }
 
         return DB::select($query, $params);
