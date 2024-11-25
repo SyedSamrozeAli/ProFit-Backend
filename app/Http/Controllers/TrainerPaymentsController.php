@@ -165,8 +165,10 @@ class TrainerPaymentsController extends Controller
     {
         try {
 
-            $paymentsData = TrainerPayments::getPaymentData($request->month, $request->year);
-
+            $paymentsData = TrainerPayments::getPaymentData($request->month, $request->year, $request->trainerId);
+            if (empty($paymentsData)) {
+                return errorResponse("No data found");
+            }
             return successResponse("Data retrieved successfully", TrainerPaymentsResource::collection($paymentsData));
 
         } catch (\Exception $e) {
