@@ -37,7 +37,13 @@ class OtherExpensePaymentsRequest extends FormRequest
                     'payment_method' => 'required|in:cash,online',
                     'payment_reciept' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 ];
+            case 'GET':
 
+                return [
+                    'expenseId' => 'nullable|exists:expense,expense_id',
+                    'month' => 'nullable|integer|min:1|max:12',
+                    'year' => 'nullable|integer|min:2010|max:2400',
+                ];
             default:
                 return [];
         }
