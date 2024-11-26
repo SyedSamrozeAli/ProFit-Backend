@@ -24,7 +24,7 @@ class OtherExpensePayments extends Model
 
     public $timestamps = false;
 
-    static public function getPaymentData($month, $year)
+    static public function getPaymentData($month, $year, $expenseId = null)
     {
         $query = "  SELECT 
                         E.expense_id,
@@ -41,14 +41,18 @@ class OtherExpensePayments extends Model
                     ON 
                         E.expense_category = EC.expense_category_id
                     WHERE 
-                        1=1 AND EXTRACT(MONTH FROM E.expense_date) = ? AND EXTRACT(YEAR FROM E.expense_date) = ?";
+                        1=1 ";
         $params = [];
 
         if ($month && $year) {
+            $query .= "AND EXTRACT(MONTH FROM E.expense_date) = ? AND EXTRACT(YEAR FROM E.expense_date) = ?";
             $params[] = $month;
             $params[] = $year;
-        } else {
-            $params[] = NULL;
+        }
+
+        if ($expenseId) {
+            $query .= " AND E.expense_id =?";
+            $params[] = $expenseId;
         }
 
         return DB::select($query, $params);
