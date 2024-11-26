@@ -23,6 +23,7 @@ class MemberPaymentsResource extends JsonResource
             'member_id' => $this->member_id,
             'member_name' => $this->member_name,
             'payment_date' => $this->payment_date,
+            'price' => $this->price,
             'payment_amount' => $this->payment_amount,
             'paid_amount' => $this->paid_amount,
             'dues' => $this->dues,
