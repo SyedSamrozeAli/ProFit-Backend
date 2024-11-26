@@ -28,7 +28,7 @@ class InventoryPayments extends Model
         ];
 
 
-    static public function getPaymentData($month, $year)
+    static public function getPaymentData($month, $year, $inventoryId = null)
     {
         $query = "  SELECT 
                         I.inventory_id,
@@ -52,9 +52,9 @@ class InventoryPayments extends Model
                     LEFT JOIN 
                         inventory_payments P
                     ON 
-                        I.inventory_id = P.inventory_id
+                        I.inventory_id = P.inventory_id 
                     WHERE 
-                        1=1 AND EXTRACT(MONTH FROM P.payment_date) = ? AND EXTRACT(YEAR FROM P.payment_date) = ?";
+                        1=1 AND EXTRACT(MONTH FROM I.purchase_date) = ? AND EXTRACT(YEAR FROM I.purchase_date) = ?";
         $params = [];
 
         if ($month && $year) {
@@ -63,7 +63,10 @@ class InventoryPayments extends Model
         } else {
             $params[] = NULL;
         }
-
+        if ($inventoryId) {
+            $query .= " AND I.inventory_id =?";
+            $params[] = $inventoryId;
+        }
         return DB::select($query, $params);
 
 
