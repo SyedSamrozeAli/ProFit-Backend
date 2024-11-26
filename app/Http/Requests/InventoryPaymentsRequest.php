@@ -50,6 +50,7 @@ class InventoryPaymentsRequest extends FormRequest
                 return [
                     'month' => 'required|integer|min:1|max:12',
                     'year' => 'required|integer|min:2010|max:2400',
+                    'inventoryId' => 'nullable|exists:inventory,inventory_id',
                 ];
 
             default:
