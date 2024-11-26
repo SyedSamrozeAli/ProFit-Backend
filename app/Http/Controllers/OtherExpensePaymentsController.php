@@ -71,7 +71,7 @@ class OtherExpensePaymentsController extends Controller
     {
         try {
 
-            $paymentsData = OtherExpensePayments::getPaymentData($request->month, $request->year);
+            $paymentsData = OtherExpensePayments::getPaymentData($request->month, $request->year, $request->expenseId);
             if (!empty($paymentsData))
                 return successResponse("Data retrieved successfully", OtherExpensePaymentsResource::collection($paymentsData));
             else
