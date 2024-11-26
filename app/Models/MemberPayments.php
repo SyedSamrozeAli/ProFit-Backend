@@ -59,6 +59,7 @@ class MemberPayments extends Model
                         M.name AS member_name,
                         P.member_payment_id,
                         MM.membership_id,
+                        MM.price,
                         P.payment_date,
                         P.payment_amount,
                         P.payment_status,
