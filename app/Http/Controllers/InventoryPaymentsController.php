@@ -88,7 +88,7 @@ class InventoryPaymentsController extends Controller
     {
         try {
 
-            $paymentsData = InventoryPayments::getPaymentData($request->month, $request->year);
+            $paymentsData = InventoryPayments::getPaymentData($request->month, $request->year, $request->inventoryId);
 
             return successResponse("Data retrieved successfully", InventoryPaymentsResource::collection($paymentsData));
 
