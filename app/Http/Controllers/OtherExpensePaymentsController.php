@@ -19,7 +19,7 @@ class OtherExpensePaymentsController extends Controller
 
             $expenseCategoryId = ExpenseCategory::getCategoryId($req->expense_category);
             // Adding payment reciept image
-            if ($req->has('payment_reciept')) {
+            if ($req->has('payment_reciept') && $req->payment_reciept != null) {
 
                 $paymentReciept = $req->file('payment_reciept');
                 $imageName = time() . '.' . $paymentReciept->getClientOriginalExtension();
