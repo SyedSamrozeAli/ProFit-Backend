@@ -32,7 +32,7 @@ class TrainerPaymentsController extends Controller
             }
 
             // Adding payment reciept image
-            if ($req->has('payment_reciept')) {
+            if ($req->has('payment_reciept') && $req->payment_reciept != null) {
                 $paymentReciept = $req->file('payment_reciept');
                 $imageName = time() . '.' . $paymentReciept->getClientOriginalExtension();
                 $paymentReciept->move('images/trainer/paymentsReciepts', $imageName);
