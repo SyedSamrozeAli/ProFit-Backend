@@ -18,6 +18,11 @@ class OtherExpensePaymentsController extends Controller
             DB::beginTransaction();
 
             $expenseCategoryId = ExpenseCategory::getCategoryId($req->expense_category);
+            $status = "pending";
+
+            if ($req->has('amount') && $req->payment_amount == $req->amount) {
+                $status = "completed";
+            }
             // Adding payment reciept image
             if ($req->has('payment_reciept') && $req->payment_reciept != null) {
 
@@ -32,11 +37,13 @@ class OtherExpensePaymentsController extends Controller
                     'expense_id' => $req->expense_id,
                 ],
                 [
-                    'expense_date' => $req->expense_date,
+                    'expense_date' => $req->expense_date ?? null,
+                    'due_date' => $req->due_date ?? null,
                     'expense_category' => $expenseCategoryId,
-                    'amount' => $req->amount,
+                    'amount' => $req->amount ?? 0,
                     'payment_method' => $req->payment_method,
-                    'expense_status' => $req->expense_status == "completed" ? 2 : 1,
+                    'payment_amount' => $req->payment_amount,
+                    'expense_status' => $status == "completed" ? 2 : 1,
                     'payment_reciept' => $imageName ?? null,
                 ]
             );
