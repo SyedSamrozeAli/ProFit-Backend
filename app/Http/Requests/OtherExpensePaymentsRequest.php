@@ -32,9 +32,10 @@ class OtherExpensePaymentsRequest extends FormRequest
                 return [
                     'expense_category' => 'required|exists:expense_categories,expense_category_name',
                     'amount' => 'required|numeric',
-                    'expense_date' => 'required|date',
-                    'expense_status' => 'required|exists:payment_status,status_name',
-                    'payment_method' => 'required|in:cash,online',
+                    'expense_date' => 'nullable|date',
+                    'payment_method' => 'nullable|in:cash,online',
+                    'payment_amount' => 'required|numeric',
+                    'due_date' => 'required|date',
                     'payment_reciept' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 ];
             case 'GET':
