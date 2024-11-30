@@ -43,7 +43,7 @@ class OtherExpensePaymentsController extends Controller
                     'amount' => $req->amount ?? 0,
                     'payment_method' => $req->payment_method,
                     'payment_amount' => $req->payment_amount,
-                    'expense_status' => $status == "completed" ? 2 : 1,
+                    'expense_status' => $status == "completed" ? 1 : 2,
                     'payment_reciept' => $imageName ?? null,
                 ]
             );
