@@ -20,19 +20,19 @@ class AdminAuthController extends Controller
 {
     public function Login(AdminAuthRequest $request)
     {
-        // Validate reCAPTCHA token
-        $recaptchaToken = $request->input('recaptchaToken');
+        // // Validate reCAPTCHA token
+        // $recaptchaToken = $request->input('recaptchaToken');
 
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => env('RECAPTCHA_SECRET_KEY'), // Add your secret key in .env
-            'response' => $recaptchaToken,
-        ]);
+        // $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        //     'secret' => env('RECAPTCHA_SECRET_KEY'), // Add your secret key in .env
+        //     'response' => $recaptchaToken,
+        // ]);
 
-        $recaptchaResult = json_decode($response->body(), true);
+        // $recaptchaResult = json_decode($response->body(), true);
 
-        if (!$recaptchaResult['success']) {
-            return errorResponse("Invalid reCAPTCHA verification", 422);
-        }
+        // if (!$recaptchaResult['success']) {
+        //     return errorResponse("Invalid reCAPTCHA verification", 422);
+        // }
 
         // Authentication logic
         if (!$token = $this->getToken($request)) {
