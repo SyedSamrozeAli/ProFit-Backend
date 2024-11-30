@@ -195,4 +195,34 @@ class Trainer extends Model
     {
         DB::delete("DELETE FROM trainers_have_members WHERE member_id=?", [$memberId]);
     }
+
+    static public function getActiveTrainers()
+    {
+        return DB::select("SELECT COUNT(*) AS total_active_trainers FROM trainers WHERE availability=1")[0]->total_active_trainers;
+    }
+
+    static public function getTrainersGrowth()
+    {
+        $currentMonthCount = DB::select(
+            "   SELECT COUNT(*) as count 
+                FROM trainers
+                WHERE YEAR(hire_date) = YEAR(CURRENT_DATE) 
+                AND MONTH(hire_date) = MONTH(CURRENT_DATE)
+                AND availability=1"
+        )[0]->count;
+
+        $lastMonthCount = DB::select(
+            "   SELECT COUNT(*) as count 
+                FROM trainers 
+                WHERE YEAR(hire_date) = YEAR(CURRENT_DATE) 
+                AND MONTH(hire_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+                AND  availability=1
+    "
+        )[0]->count;
+
+        return [
+            'current_month' => $currentMonthCount,
+            'last_month' => $lastMonthCount
+        ];
+    }
 }
