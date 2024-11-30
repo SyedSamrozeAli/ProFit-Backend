@@ -101,4 +101,21 @@ class TrainerPayments extends Model
     {
         return DB::delete("DELETE FROM trainers_payments WHERE trainer_payment_id=? ", [$paymentId]);
     }
+
+    public static function getTrainerSalariesMonth($month, $year)
+    {
+        $query = " SELECT SUM(paid_amount) AS total 
+        FROM trainers_payments 
+        WHERE 1=1";
+
+        $params = [];
+        if ($month && $year) {
+            $query .= " AND MONTH(payment_date)=? AND YEAR(payment_date)=? ";
+            $params[] = $month;
+            $params[] = $year;
+        }
+
+        return DB::selectOne($query, $params)->total ?? 0;
+
+    }
 }
