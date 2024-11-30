@@ -76,4 +76,20 @@ class InventoryPayments extends Model
     {
         return DB::delete("DELETE FROM inventory_payments WHERE inventory_payment_id=? ", [$paymentId]);
     }
+
+    public static function getInventoryPaymentsMonth($month, $year)
+    {
+        $query = " SELECT SUM(amount_paid) AS total 
+        FROM inventory_payments 
+        WHERE 1=1";
+
+        $params = [];
+        if ($month && $year) {
+            $query .= " AND MONTH(payment_date)=? AND YEAR(payment_date)=? ";
+            $params[] = $month;
+            $params[] = $year;
+        }
+
+        return DB::selectOne($query, $params)->total ?? 0;
+    }
 }
