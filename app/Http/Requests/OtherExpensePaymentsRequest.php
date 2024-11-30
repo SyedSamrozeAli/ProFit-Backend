@@ -31,7 +31,7 @@ class OtherExpensePaymentsRequest extends FormRequest
             case 'POST':
                 return [
                     'expense_category' => 'required|exists:expense_categories,expense_category_name',
-                    'amount' => 'required|numeric',
+                    'amount' => 'numeric',
                     'expense_date' => 'nullable|date',
                     'payment_method' => 'nullable|in:cash,online',
                     'payment_amount' => 'required|numeric',
