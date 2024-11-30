@@ -75,4 +75,19 @@ class Membership extends Model
     {
         return DB::select("SELECT membership_id FROM member_has_membership WHERE member_id = ?", [$memberId]);
     }
+
+    public static function getMembershipTypeData()
+    {
+        return DB::select(
+            "SELECT 
+                M.membership_type, 
+                COUNT(*) as total_members 
+            FROM member_has_membership MM
+            JOIN memberships M 
+            ON MM.membership_id = M.membership_id
+            GROUP BY membership_type
+    "
+        );
+    }
+
 }
