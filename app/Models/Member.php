@@ -178,4 +178,48 @@ class Member extends Model
         return $DBquery;
 
     }
+
+    static public function getActiveMembers()
+    {
+        return DB::select("SELECT COUNT(*) AS total_active_members FROM members WHERE user_status='active'")[0]->total_active_members;
+    }
+
+    static public function getMembersGrowth()
+    {
+        $currentMonthCount = DB::select(
+            "   SELECT COUNT(*) as count 
+                FROM members 
+                WHERE YEAR(addmission_date) = YEAR(CURRENT_DATE) 
+                AND MONTH(addmission_date) = MONTH(CURRENT_DATE)
+                AND user_status='active'"
+        )[0]->count;
+
+        $lastMonthCount = DB::select(
+            "   SELECT COUNT(*) as count 
+                FROM members 
+                WHERE YEAR(addmission_date) = YEAR(CURRENT_DATE) 
+                AND MONTH(addmission_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+                AND user_status='active'
+    "
+        )[0]->count;
+
+        return [
+            'current_month' => $currentMonthCount,
+            'last_month' => $lastMonthCount
+        ];
+    }
+
+    public static function getNewMembersPerMonth($year)
+    {
+        return DB::select(
+            "SELECT 
+                MONTH(addmission_date) AS month, 
+                COUNT(*) AS new_members 
+             FROM members 
+             WHERE YEAR(addmission_date) = ? 
+             GROUP BY MONTH(addmission_date) 
+             ORDER BY month",
+            [$year]
+        );
+    }
 }
