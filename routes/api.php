@@ -12,6 +12,7 @@ use App\Http\Controllers\MemberPaymentsController;
 use App\Http\Controllers\TrainerPaymentsController;
 use App\Http\Controllers\InventoryPaymentsController;
 use App\Http\Controllers\OtherExpensePaymentsController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +23,9 @@ use Illuminate\Support\Facades\Route;
 
 
 // Authentication Routes
-Route::post('/admin/auth/login', [AdminAuthController::class, 'Login']);
+Route::post('/admin/auth/login', [AdminAuthController::class, 'Login'])->name('login');
+Route::post('/admin/auth/forgott-password', [AdminAuthController::class, 'ForgotPassword'])->name('forgotPassword');
+Route::post('/admin/auth/reset-password', [AdminAuthController::class, 'ResetPassword'])->name('resetPassword');
 
 Route::middleware(['authenticate'])->group(function () {
 
@@ -88,6 +91,31 @@ Route::middleware(['authenticate'])->group(function () {
     Route::get('/other-expense-payment', [OtherExpensePaymentsController::class, 'getPayments']);
     Route::post('/other-expense-payment', [OtherExpensePaymentsController::class, 'addExpense']);
     Route::delete('/other-expense-payment/{paymentId}', [OtherExpensePaymentsController::class, 'deletePayment']);
+
+
+    // Dashboard Routes
+    Route::get('/active-members', [DashboardController::class, 'getTotalActiveMembers']);
+    Route::get('/members-growth', [DashboardController::class, 'getMembersGrowth']);
+
+    Route::get('/active-trainers', [DashboardController::class, 'getTotalActiveTrainers']);
+    Route::get('/trainers-growth', [DashboardController::class, 'getTrainersGrowth']);
+
+    Route::get('/total-revenue', [DashboardController::class, 'getTotalRevenue']);
+    Route::get('/revenue-growth', [DashboardController::class, 'getRevenueGrowth']);
+
+    Route::get('/attendance-rate', [DashboardController::class, 'getMemberAttendanceRate']);
+    Route::get('/attendance-growth-rate', [DashboardController::class, 'getAttendanceGrowthRate']);
+
+    Route::get('/monthly-expense', [DashboardController::class, 'getMonthlyExpenses']);
+    Route::get('/expense-growth-rate', [DashboardController::class, 'getExpenseGrowthRate']);
+
+    Route::get('/monthly-profit', [DashboardController::class, 'getMonthlyProfit']);
+    Route::get('/monthly-profit-growth-rate', [DashboardController::class, 'getProfitGrowthRate']);
+
+    Route::get('/monthly-revenue-expense', [DashboardController::class, 'getMonthlyRevenueExpenseData']);
+    Route::get('/new-members-per-month', [DashboardController::class, 'getNewMembersPerMonth']);
+    Route::get('/monthly-expense-distribution', [DashboardController::class, 'getExpenseDistribution']);
+    Route::get('/membership-type-comparision', [DashboardController::class, 'getMembershipTypeComparison']);
 });
 
 
