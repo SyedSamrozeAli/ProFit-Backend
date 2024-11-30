@@ -20,6 +20,8 @@ class OtherExpensePayments extends Model
         'expense_status',
         'payment_method',
         'payment_reciept',
+        'due_date',
+        'payment_amount',
     ];
 
     public $timestamps = false;
@@ -30,6 +32,8 @@ class OtherExpensePayments extends Model
                         E.expense_id,
                         E.expense_date,
                         E.amount,
+                        E.payment_amount,
+                        E.due_date,
                         E.expense_status,
                         E.payment_method,
                         E.payment_reciept,
@@ -64,4 +68,42 @@ class OtherExpensePayments extends Model
     {
         return DB::delete("DELETE FROM expense WHERE expense_id=? ", [$paymentId]);
     }
+
+    public static function getOtherExpensesMonth($month, $year)
+    {
+        $query = " SELECT SUM(amount) AS total 
+        FROM expense
+        WHERE 1=1";
+
+        $params = [];
+        if ($month && $year) {
+            $query .= " AND MONTH(expense_date)=? AND YEAR(expense_date)=? ";
+            $params[] = $month;
+            $params[] = $year;
+        }
+
+        return DB::selectOne($query, $params)->total ?? 0;
+    }
+
+    public static function getMonthlyExpenses($monthOffset)
+    {
+        return DB::selectOne("
+        SELECT 
+            COALESCE(
+                (SELECT SUM(paid_amount) FROM trainers_payments 
+                 WHERE DATE_FORMAT(payment_date, '%Y-%m') = DATE_FORMAT(DATE_SUB(CURRENT_DATE(), INTERVAL ? MONTH), '%Y-%m')), 0
+            ) 
+            + 
+            COALESCE(
+                (SELECT SUM(amount) FROM expense 
+                 WHERE DATE_FORMAT(expense_date, '%Y-%m') = DATE_FORMAT(DATE_SUB(CURRENT_DATE(), INTERVAL ? MONTH), '%Y-%m')), 0
+            )
+            + 
+            COALESCE(
+                (SELECT SUM(amount_paid) FROM inventory_payments 
+                 WHERE DATE_FORMAT(payment_date, '%Y-%m') = DATE_FORMAT(DATE_SUB(CURRENT_DATE(), INTERVAL ? MONTH), '%Y-%m')), 0
+            ) AS total_expenses
+    ", [$monthOffset, $monthOffset, $monthOffset])->total_expenses ?? 0;
+    }
+
 }
