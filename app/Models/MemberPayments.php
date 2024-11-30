@@ -110,4 +110,62 @@ class MemberPayments extends Model
     {
         return DB::delete("DELETE FROM members_payments WHERE member_payment_id=? ", [$paymentId]);
     }
+
+    static public function getTotalRevenue($month, $year)
+    {
+        $query = "   SELECT SUM(paid_amount) as total_revenue 
+                FROM members_payments WHERE 1=1";
+
+        $params = [];
+
+        if ($month && $year) {
+            $query .= " AND MONTH(payment_date)=? AND YEAR(payment_date)=? ";
+            $params[] = $month;
+            $params[] = $year;
+        }
+
+        $totalRevenue = DB::select($query, $params)[0]->total_revenue;
+
+        return $totalRevenue ?? 0; // Default to 0 if no payments exist
+    }
+
+    // static public function getTotalRevenue($month = 'current')
+    // {
+    //     $query = "SELECT COALESCE(SUM(paid_amount), 0) as total_revenue 
+    //           FROM members_payments WHERE 1=1";
+
+    //     if ($month === 'current') {
+    //         $query .= " AND DATE_FORMAT(payment_date, '%Y-%m') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m')";
+    //     } elseif ($month === 'previous') {
+    //         $query .= " AND DATE_FORMAT(payment_date, '%Y-%m') = DATE_FORMAT(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), '%Y-%m')";
+    //     }
+
+    //     $totalRevenue = DB::select($query)[0]->total_revenue;
+
+    //     return $totalRevenue;
+    // }
+
+
+    static public function getRevenueGrowth()
+    {
+        $currentMonthCount = DB::select(
+            "   SELECT sum(paid_amount) as total_revenue 
+                FROM members_payments 
+                WHERE YEAR(payment_date) = YEAR(CURRENT_DATE) 
+                AND MONTH(payment_date) = MONTH(CURRENT_DATE)"
+        )[0]->total_revenue;
+
+        $lastMonthCount = DB::select(
+            "   SELECT SUM(paid_amount) as total_revenue
+                FROM members_payments 
+                WHERE YEAR(payment_date) = YEAR(CURRENT_DATE) 
+                AND MONTH(payment_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+    "
+        )[0]->total_revenue;
+
+        return [
+            'current_month' => $currentMonthCount,
+            'last_month' => $lastMonthCount
+        ];
+    }
 }
