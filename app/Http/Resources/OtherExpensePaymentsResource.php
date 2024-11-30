@@ -22,6 +22,8 @@ class OtherExpensePaymentsResource extends JsonResource
             'payment_method' => $this->payment_method,
             'expense_status' => $this->expense_status == 1 ? "completed" : "pending",
             'payment_reciept' => $this->payment_reciept,
+            'payment_amount' => $this->payment_amount,
+            'due_date' => $this->due_date,
         ];
     }
 }
