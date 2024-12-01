@@ -106,4 +106,14 @@ class OtherExpensePayments extends Model
     ", [$monthOffset, $monthOffset, $monthOffset])->total_expenses ?? 0;
     }
 
+    public static function calculateOtherExpenses($startDate, $endDate)
+    {
+        return DB::selectOne(
+            "   SELECT SUM(amount) as total_expenses
+                FROM expense
+                WHERE expense_date BETWEEN ? AND ?",
+            [$startDate, $endDate]
+        )->total_expenses;
+    }
+
 }
