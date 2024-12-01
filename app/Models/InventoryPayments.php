@@ -92,4 +92,14 @@ class InventoryPayments extends Model
 
         return DB::selectOne($query, $params)->total ?? 0;
     }
+
+    public static function calculateInventoryPayments($startDate, $endDate)
+    {
+        return DB::selectOne(
+            "SELECT SUM(amount_paid) as total_inventory_payments
+            FROM inventory_payments
+            WHERE payment_date BETWEEN ? AND ?",
+            [$startDate, $endDate]
+        )->total_inventory_payments;
+    }
 }
