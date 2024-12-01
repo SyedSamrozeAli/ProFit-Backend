@@ -168,4 +168,15 @@ class MemberPayments extends Model
             'last_month' => $lastMonthCount
         ];
     }
+
+    public static function calculateRevenue($startDate, $endDate)
+    {
+        return DB::selectOne(
+            "   SELECT SUM(paid_amount) as total_revenue
+                FROM members_payments
+                WHERE payment_date BETWEEN ? AND ?"
+            ,
+            [$startDate, $endDate]
+        )->total_revenue;
+    }
 }
