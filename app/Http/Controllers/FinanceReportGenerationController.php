@@ -50,11 +50,14 @@ class FinanceReportGenerationController extends Controller
             // return view('finance_report', compact('reportData'));
 
             // Return the data to the PDF view for rendering
-            $pdf = Pdf::loadView('finances_report', $reportData);
+            $pdf = Pdf::loadView('finance_report', compact('reportData'));
 
             // Download the PDF as a response
-            return $pdf->download('financial_report_' . $startDate->format('Y_m_d') . '_to_' . $endDate->format('Y_m_d') . '.pdf');
+            return $pdf->download('financial_report_' . $startDate . '_to_' . $endDate . '.pdf')
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'attachment; filename="financial_report_' . $startDate . '_to_' . $endDate . '.pdf"');
 
+            // return $pdf->stream();
             // return successResponse("Data fetched successfully", $reportData);
         } catch (\Exception $e) {
             return errorResponse($e->getMessage(), 500);
