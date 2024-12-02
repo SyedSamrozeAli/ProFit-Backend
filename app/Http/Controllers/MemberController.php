@@ -161,7 +161,7 @@ class MemberController extends Controller
                     $updateValues[] = $request->health_issues;
                 }
 
-                if ($request->has('trainer_id')) {
+                if ($request->has('trainer_id') && $request->trainer_id) {
                     Trainer::updateMember($request->trainer_id, $memberId);
                 }
 
@@ -201,7 +201,11 @@ class MemberController extends Controller
 
                         // If the membership is changing from 'Standard' --> 'Premium' only then we will add
                         // the member in trainer's table.
-                        if ($currentMembership[0]->membership_id == 1)
+
+                        //get the membership id of "Standard" package
+                        $standardMembershipId = Membership::getMembershipID("Standard");
+
+                        if ($currentMembership[0]->membership_id == $standardMembershipId)
                             Trainer::addMember($request->trainer_id, $memberId);
 
                     } else if ($request->membership_type == 'Standard') {
