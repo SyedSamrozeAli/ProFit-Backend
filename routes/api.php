@@ -118,7 +118,7 @@ Route::middleware(['authenticate'])->group(function () {
     Route::get('/monthly-expense-distribution', [DashboardController::class, 'getExpenseDistribution']);
     Route::get('/membership-type-comparision', [DashboardController::class, 'getMembershipTypeComparison']);
 
+    Route::get('/finance-report-generation', [FinanceReportGenerationController::class, 'generateFinancialReport']);
 });
-Route::get('/finance-report-generation', [FinanceReportGenerationController::class, 'generateFinancialReport']);
 
 
