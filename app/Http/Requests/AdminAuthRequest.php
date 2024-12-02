@@ -29,7 +29,7 @@ class AdminAuthRequest extends FormRequest
             return [
                 'email' => 'required|string|email|exists:admin,email',
                 'password' => 'required|string',
-                'recaptchaToken' => 'required|string',
+                // 'recaptchaToken' => 'required|string',
             ];
         } else if ($routeName == 'forgotPassword') {
             return [

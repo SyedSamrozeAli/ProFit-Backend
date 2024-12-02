@@ -118,4 +118,15 @@ class TrainerPayments extends Model
         return DB::selectOne($query, $params)->total ?? 0;
 
     }
+
+    public static function calculateTrainerPayments($startDate, $endDate)
+    {
+        return DB::selectOne(
+            "   SELECT SUM(paid_amount) as total_trainer_payments
+                FROM trainers_payments
+                WHERE payment_date BETWEEN ? AND ?"
+            ,
+            [$startDate, $endDate]
+        )->total_trainer_payments;
+    }
 }

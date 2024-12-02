@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\FinanceReportGenerationController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\TrainerAttendanceController;
@@ -116,6 +117,8 @@ Route::middleware(['authenticate'])->group(function () {
     Route::get('/new-members-per-month', [DashboardController::class, 'getNewMembersPerMonth']);
     Route::get('/monthly-expense-distribution', [DashboardController::class, 'getExpenseDistribution']);
     Route::get('/membership-type-comparision', [DashboardController::class, 'getMembershipTypeComparison']);
+
+    Route::get('/finance-report-generation', [FinanceReportGenerationController::class, 'generateFinancialReport']);
 });
 
 
