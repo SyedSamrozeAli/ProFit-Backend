@@ -23,10 +23,29 @@ class AdminAuthRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'email' => 'required|string|email|exists:admin,email',
-            'password' => 'required|string',
-        ];
+        $routeName = $this->route()->getName();
+        if ($routeName == 'login') {
+
+            return [
+                'email' => 'required|string|email|exists:admin,email',
+                'password' => 'required|string',
+                // 'recaptchaToken' => 'required|string',
+            ];
+        } else if ($routeName == 'forgotPassword') {
+            return [
+                'email' => 'required|string|email|exists:admin,email',
+            ];
+
+        } else if ($routeName == 'resetPassword') {
+            return [
+                'token' => 'required|string|exists:password_reset_tokens,token',
+                'password' => 'required|string|confirmed',
+                'password_confirmation' => 'required',
+            ];
+
+        } else {
+            return [];
+        }
     }
 
     protected function failedValidation(Validator $validator)

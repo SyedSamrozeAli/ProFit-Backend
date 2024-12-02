@@ -20,15 +20,15 @@ class AdminAuthResource extends JsonResource
             return [
                 'token' => $data["token"],
                 'user' => [
-                    'username' => $data['user']->username,
-                    'email' => $data['user']->email,
+                    'username' => $data['admin']->username,
+                    'email' => $data['admin']->email,
                 ]
             ];
         } else {
             return [
                 'user' => [
-                    'username' => $data['user']->username,
-                    'email' => $data['user']->email,
+                    'username' => $data['admin']->username,
+                    'email' => $data['admin']->email,
                 ]
             ];
         }

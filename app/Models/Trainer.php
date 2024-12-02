@@ -17,9 +17,15 @@ class Trainer extends Model
     static public function addTrainer(TrainerRequest $request)
     {
         $age = Carbon::parse($request->DOB)->age;
+
+        // Adding profile image
+        $profileImage = $request->file('trainer_profile_image');
+        $imageName = time() . '.' . $profileImage->getClientOriginalExtension();
+        $profileImage->move('images/trainer/', $imageName);
+
         // Store the trainer data in the database
         DB::statement(
-            "INSERT INTO trainers (trainer_name,trainer_email,CNIC,gender,DOB,age,phone_number,trainer_address,experience,salary,availability,rating)
+            "INSERT INTO trainers (trainer_name,trainer_email,CNIC,gender,DOB,age,phone_number,trainer_address,experience,salary,availability,rating,trainer_profile_image)
             VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
         
         ",
@@ -35,7 +41,8 @@ class Trainer extends Model
                 $request->experience,
                 $request->salary,
                 1, // 1 means TRUE
-                $request->rating
+                $request->rating,
+                $imageName
             ]
         );
     }
@@ -176,13 +183,46 @@ class Trainer extends Model
 
     static public function updateMember($trainerId, $memberId)
     {
-        DB::update("UPDATE trainers_have_members SET trainer_id=? WHERE member_id=?", [$trainerId, $memberId]);
+        $updatedRow = DB::update("UPDATE trainers_have_members SET trainer_id=? WHERE member_id=?", [$trainerId, $memberId]);
+
+        if ($updatedRow > 0)
+            return true;
+        else
+            return false;
     }
 
     static public function deleteMember($memberId)
     {
-        $null = null;
         DB::delete("DELETE FROM trainers_have_members WHERE member_id=?", [$memberId]);
-        DB::update("UPDATE members SET trainer_id=? WHERE member_id=?", [NULL, $memberId]);
+    }
+
+    static public function getActiveTrainers()
+    {
+        return DB::select("SELECT COUNT(*) AS total_active_trainers FROM trainers WHERE availability=1")[0]->total_active_trainers;
+    }
+
+    static public function getTrainersGrowth()
+    {
+        $currentMonthCount = DB::select(
+            "   SELECT COUNT(*) as count 
+                FROM trainers
+                WHERE YEAR(hire_date) = YEAR(CURRENT_DATE) 
+                AND MONTH(hire_date) = MONTH(CURRENT_DATE)
+                AND availability=1"
+        )[0]->count;
+
+        $lastMonthCount = DB::select(
+            "   SELECT COUNT(*) as count 
+                FROM trainers 
+                WHERE YEAR(hire_date) = YEAR(CURRENT_DATE) 
+                AND MONTH(hire_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+                AND  availability=1
+    "
+        )[0]->count;
+
+        return [
+            'current_month' => $currentMonthCount,
+            'last_month' => $lastMonthCount
+        ];
     }
 }

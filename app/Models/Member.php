@@ -54,11 +54,16 @@ class Member extends Model
         $BMI = $request->weight / (($request->height) * ($request->height));
         $age = Carbon::parse($request->DOB)->age;
 
+        // Adding profile image
+        $profileImage = $request->file('profile_image');
+        $imageName = time() . '.' . $profileImage->getClientOriginalExtension();
+        $profileImage->move('images/member/', $imageName);
+
         // Inserting member data into members table
         DB::insert(
             "INSERT INTO members 
-                    (name, member_email, phone_number, address, CNIC, DOB,age, trainer_id, height, weight, bmi, profile_image, health_issues, user_status, addmission_date)
-                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                    (name, member_email, phone_number, address, CNIC, DOB,age, height, weight, bmi, profile_image, health_issues, user_status, addmission_date)
+                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
             ,
             [
                 $request->name,
@@ -68,11 +73,10 @@ class Member extends Model
                 $request->CNIC,
                 $request->DOB,
                 $age,
-                $request->trainer_id,
                 $request->height,
                 $request->weight,
                 $BMI,
-                $request->profile_image,
+                $imageName,
                 $request->health_issues,
                 'active',
                 $request->addmission_date
@@ -83,11 +87,6 @@ class Member extends Model
     static public function getMemberId($CNIC)
     {
         return DB::select("SELECT member_id FROM members WHERE CNIC=?", [$CNIC]);
-    }
-
-    static public function updateMemberMembershipId($membershipId, $memberId)
-    {
-        DB::update("UPDATE members SET membership_id=? WHERE member_id=?", [$membershipId, $memberId]);
     }
 
     static public function updateMember($updateQuery, $updateValues)
@@ -178,5 +177,49 @@ class Member extends Model
 
         return $DBquery;
 
+    }
+
+    static public function getActiveMembers()
+    {
+        return DB::select("SELECT COUNT(*) AS total_active_members FROM members WHERE user_status='active'")[0]->total_active_members;
+    }
+
+    static public function getMembersGrowth()
+    {
+        $currentMonthCount = DB::select(
+            "   SELECT COUNT(*) as count 
+                FROM members 
+                WHERE YEAR(addmission_date) = YEAR(CURRENT_DATE) 
+                AND MONTH(addmission_date) = MONTH(CURRENT_DATE)
+                AND user_status='active'"
+        )[0]->count;
+
+        $lastMonthCount = DB::select(
+            "   SELECT COUNT(*) as count 
+                FROM members 
+                WHERE YEAR(addmission_date) = YEAR(CURRENT_DATE) 
+                AND MONTH(addmission_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+                AND user_status='active'
+    "
+        )[0]->count;
+
+        return [
+            'current_month' => $currentMonthCount,
+            'last_month' => $lastMonthCount
+        ];
+    }
+
+    public static function getNewMembersPerMonth($year)
+    {
+        return DB::select(
+            "SELECT 
+                MONTH(addmission_date) AS month, 
+                COUNT(*) AS new_members 
+             FROM members 
+             WHERE YEAR(addmission_date) = ? 
+             GROUP BY MONTH(addmission_date) 
+             ORDER BY month",
+            [$year]
+        );
     }
 }

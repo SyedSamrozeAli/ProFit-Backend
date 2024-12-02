@@ -34,7 +34,7 @@ class Inventory extends Model
     static public function addInventory(InventoryRequest $req)
     {
 
-        $itemName = $req->item_name;
+        $itemName = $req->equipment_name;
 
         $equipment = DB::select("SELECT equipment_id FROM equipments WHERE equipment_name = ? OR equipment_name LIKE ?", [$itemName, "%$itemName%"]);
 
@@ -57,7 +57,7 @@ class Inventory extends Model
                 $req->cost_per_unit,
                 $req->quantity,
                 $req->quantity * $req->cost_per_unit,
-                NULL,
+                $req->mantainance_date,
                 $req->warranty_period,
                 NULL,
                 $req->purchase_date,

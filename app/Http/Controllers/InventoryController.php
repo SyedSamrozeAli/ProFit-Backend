@@ -78,9 +78,9 @@ class InventoryController extends Controller
 
             // Check which fields are present in the request and build the query accordingly
             // It will concatinate the values if the request contains multiple fields
-            if ($request->has('item_name')) {
+            if ($request->has('equipment_name')) {
                 $equipUpdateFields[] = "equipment_name = ?";
-                $equipUpdateValues[] = $request->item_name;
+                $equipUpdateValues[] = $request->equipment_name;
             }
 
             if ($request->has('description')) {
@@ -139,6 +139,11 @@ class InventoryController extends Controller
                 $invUpdateValues[] = $request->supplier_name;
             }
 
+            if ($request->has('mantainance_date')) {
+                $invUpdateFields[] = "mantainance_date = ?";
+                $invUpdateValues[] = $request->mantainance_date;
+            }
+
             if ($request->has('purchase_date')) {
                 $invUpdateFields[] = "purchase_date = ?";
                 $invUpdateValues[] = $request->purchase_date;
@@ -160,8 +165,11 @@ class InventoryController extends Controller
             $equipUpdateQuery .= implode(", ", $equipUpdateFields) . " WHERE equipment_id = ?";
 
             // Execute the update query
-            Inventory::updateInventory($invUpdateQuery, $invUpdateValues);
-            Equipment::updateEquipment($equipUpdateQuery, $equipUpdateValues);
+            if (!empty($invUpdateFields))
+                Inventory::updateInventory($invUpdateQuery, $invUpdateValues);
+
+            if (!empty($equipUpdateFields))
+                Equipment::updateEquipment($equipUpdateQuery, $equipUpdateValues);
 
             // Find the updated Inventory
             $updatedInventory = Inventory::findInventory('inventory_id', $InventoryId);

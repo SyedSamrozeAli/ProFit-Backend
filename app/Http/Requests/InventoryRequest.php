@@ -30,7 +30,7 @@ class InventoryRequest extends FormRequest
             case 'POST':
                 return [
 
-                    'item_name' => 'string',
+                    'equipment_name' => 'string',
                     'description' => 'string',
                     'quantity' => 'integer',
                     'cost_per_unit' => 'numeric',
@@ -38,6 +38,7 @@ class InventoryRequest extends FormRequest
                     'purchase_date' => 'date',
                     'category' => 'in:Accessories,Cardio Equipment,Free Weights,Resistance Machine',
                     'warranty_period' => 'integer',
+                    'mantainance_date' => 'required|date|after:purchase_date',
                 ];
 
             case 'GET':

@@ -56,6 +56,7 @@ class MemberResource extends JsonResource
                         'price' => $membershipData->price ?? null,
                         'start_date' => $membershipData->start_date ?? null,
                         'end_date' => $membershipData->end_date ?? null,
+                        'membership_duration' => $membershipData->duration ?? null
                     ];
                 } else {
                     return [

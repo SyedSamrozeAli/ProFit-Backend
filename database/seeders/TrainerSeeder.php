@@ -30,7 +30,6 @@ class TrainerSeeder extends Seeder
                 'trainer_address' => $faker->address,
                 'experience' => $faker->numberBetween(0, 10),
                 'salary' => $faker->randomFloat(2, 30000, 50000), // Salary between 30k and 50k
-                'hourly_rate' => $faker->randomFloat(2, 500, 1500), // Hourly rate between 500 and 1500
                 'availability' => $faker->boolean,
                 'hire_date' => $faker->dateTimeThisDecade(), // Random hire date within the past 10 years
                 'rating' => $faker->randomFloat(1, 1, 5), // Rating between 1.0 and 5.0

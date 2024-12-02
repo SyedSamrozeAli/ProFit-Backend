@@ -17,10 +17,12 @@ class InventoryResource extends JsonResource
     {
 
         $equipmentName = Equipment::getValue('equipment_name', $this->equipment_id);
+        $equipmentCategory = Equipment::getValue('category', $this->equipment_id);
 
         return [
             'inventory_id' => $this->inventory_id,
             'equipment_name' => $equipmentName,
+            'category' => $equipmentCategory,
             'cost_per_unit' => $this->cost_per_unit,
             'quantity' => $this->quantity,
             'total_price' => $this->total_price,
