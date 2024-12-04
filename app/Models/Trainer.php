@@ -26,7 +26,7 @@ class Trainer extends Model
         // Store the trainer data in the database
         DB::statement(
             "INSERT INTO trainers (trainer_name,trainer_email,CNIC,gender,DOB,age,phone_number,trainer_address,experience,salary,availability,rating,trainer_profile_image)
-            VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
         
         ",
             [
