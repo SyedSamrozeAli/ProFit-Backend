@@ -30,6 +30,7 @@ class TrainerResource extends JsonResource
             'hire_date' => $this->hire_date,
             'status' => $this->availability,
             'CNIC' => $this->CNIC,
+            'trainer_profile_image'=>$this->trainer_profile_image
 
         ];
     }

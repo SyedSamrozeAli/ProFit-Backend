@@ -203,9 +203,10 @@ class MemberController extends Controller
                         // the member in trainer's table.
 
                         //get the membership id of "Standard" package
+                        
                         $standardMembershipId = Membership::getMembershipID("Standard");
-
-                        if ($currentMembership[0]->membership_id == $standardMembershipId)
+                        // dd($standardMembershipId);
+                        if ($currentMembership[0]->membership_id == $standardMembershipId[0]->membership_id)
                             Trainer::addMember($request->trainer_id, $memberId);
 
                     } else if ($request->membership_type == 'Standard') {
