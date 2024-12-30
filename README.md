@@ -58,7 +58,7 @@ ProFit is a gym management system designed for gym administrators to streamline 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your_username/ProFit.git
+   git clone https://github.com/SyedSamrozeAli/ProFit-Backend.git
 
 2. Navigate to Profit-Backend
     ```bash
