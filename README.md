@@ -108,4 +108,12 @@ ProFit is a gym management system designed for gym administrators to streamline 
 ## 🌐 Frontend Repository
 The frontend for this project is built using React and can be found <a href="https://github.com/SyedSamrozeAli/ProFit-Frontend">here</a>.
 Follow the instructions in the frontend repository to set it up and connect it with the backend.
+
+## Contributors ✨
+
+| Name          | GitHub Profile                       | Role                |
+|---------------|--------------------------------------|---------------------|
+| Syed Samroze Ali      | [@syedsamrozeali](https://github.com/SyedSamrozeAli) | Backend Developer  |
+| Shaheer Beig   | [@shaheerbeig](https://github.com/shaheerbeig) | Frontend Developer   |
+| Shaheer Mumtaz   | [@shaheermumtaz](https://github.com/Shaheer2003) | UI/UX Designer      |
     
