@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/SyedSamrozeAli/ProFit-Backend">
-    <img src="images/logo.png" alt="ProFit Logo" width="100" height="100">
+    <img src="public/images/profit-logo.png" alt="ProFit Logo" width="400" height="250">
   </a>
 </p>
 
@@ -15,7 +15,19 @@
 
 ProFit is a gym management system designed for gym administrators to streamline operations. It provides functionalities to manage members, trainers, inventory, and finances, along with real-time analytics and insights.
 
-![Screenshot](images/screenshot.png)
+
+![image](https://github.com/user-attachments/assets/f367dfde-54a1-41f8-a0a9-d2a27b39e140)
+![image](https://github.com/user-attachments/assets/d2202700-7cd5-4f65-b94f-aa6175b97a4e)
+![image](https://github.com/user-attachments/assets/98a240a5-5d55-43c6-8acd-a26964ad78cf)
+![image](https://github.com/user-attachments/assets/4eab3cbe-2ec1-44b8-b2bd-a83bf0388e9b)
+![image](https://github.com/user-attachments/assets/502eeb37-288f-4906-8a57-860ba796c387)
+![image](https://github.com/user-attachments/assets/b4610c8f-fca6-4c8b-a086-87f9cf8b1145)
+![image](https://github.com/user-attachments/assets/ca69da00-3370-4c2c-ae01-5417358de012)
+
+
+
+
+
 
 ### 🛠️ Technologies Used
 
