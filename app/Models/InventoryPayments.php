@@ -84,9 +84,13 @@ class InventoryPayments extends Model
         WHERE 1=1";
 
         $params = [];
-        if ($month && $year) {
-            $query .= " AND MONTH(payment_date)=? AND YEAR(payment_date)=? ";
+        if ($month) {
+            $query .= " AND MONTH(payment_date)=? ";
             $params[] = $month;
+        }
+
+        if ($year) {
+            $query .= " AND YEAR(payment_date)=? ";
             $params[] = $year;
         }
 
