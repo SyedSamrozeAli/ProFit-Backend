@@ -76,9 +76,13 @@ class OtherExpensePayments extends Model
         WHERE 1=1";
 
         $params = [];
-        if ($month && $year) {
-            $query .= " AND MONTH(expense_date)=? AND YEAR(expense_date)=? ";
+        if ($month) {
+            $query .= " AND MONTH(expense_date)=? ";
             $params[] = $month;
+        }
+
+        if ($year) {
+            $query .= " AND YEAR(expense_date)=? ";
             $params[] = $year;
         }
 
