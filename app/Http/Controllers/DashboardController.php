@@ -379,9 +379,9 @@ class DashboardController extends Controller
 
 
             // Fetch expenses data
-            $trainerSalaries = TrainerPayments::getTrainerSalariesMonth($month, $year);
-            $inventoryPayments = InventoryPayments::getInventoryPaymentsMonth($month, $year);
-            $otherExpenses = OtherExpensePayments::getOtherExpensesMonth($month, $year);
+            $trainerSalaries = TrainerPayments::getTrainerSalariesMonth(null, $year);
+            $inventoryPayments = InventoryPayments::getInventoryPaymentsMonth(null, $year);
+            $otherExpenses = OtherExpensePayments::getOtherExpensesMonth(null, $year);
 
             // Calculate the total expenses
             $totalExpenses = $trainerSalaries + $inventoryPayments + $otherExpenses;
